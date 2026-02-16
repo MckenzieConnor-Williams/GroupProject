@@ -37,8 +37,7 @@
                     <input type="submit" value="Sign In" class="login-item" id="login-button" />
                 </form>
 
-                <button type="button" id="load-users" class="login-item" style="margin-top:8px">Load users</button>
-                <div id="users-list" style="margin-top:12px"></div>
+
 
                 <p class="login-footer">
                     Don't have an account?
@@ -48,18 +47,63 @@
         </main>
         <script>
             (function () {
+                const LOCAL_USERS_KEY = 'syntaxstudy_users';
+
+                function getLocalUsers() {
+                    try {
+                        const raw = localStorage.getItem(LOCAL_USERS_KEY);
+                        const parsed = JSON.parse(raw || '[]');
+                        return Array.isArray(parsed) ? parsed : [];
+                    } catch (err) {
+                        console.error('Failed to parse local users', err);
+                        return [];
+                    }
+                }
+
+                async function getServerUsers() {
+                    try {
+                        const res = await fetch('http://localhost:3000/users');
+                        if (!res.ok) throw new Error(res.statusText || 'Network error');
+                        const users = await res.json();
+                        return Array.isArray(users) ? users : [];
+                    } catch (err) {
+                        return [];
+                    }
+                }
+
+                function normalizeUser(user) {
+                    return {
+                        id: user.id || null,
+                        name: (user.name || '').trim(),
+                        email: (user.email || '').trim().toLowerCase(),
+                        password: user.password || ''
+                    };
+                }
+
+                async function getCombinedUsers() {
+                    const [serverUsers, localUsers] = await Promise.all([
+                        getServerUsers(),
+                        Promise.resolve(getLocalUsers())
+                    ]);
+                    const byEmail = new Map();
+                    [...serverUsers, ...localUsers].forEach((user) => {
+                        const normalized = normalizeUser(user);
+                        if (normalized.email) byEmail.set(normalized.email, normalized);
+                    });
+                    return [...byEmail.values()];
+                }
+
                 const btn = document.getElementById('load-users');
                 const container = document.getElementById('users-list');
                 btn.addEventListener('click', async () => {
                     container.textContent = 'Loading...';
                     try {
-                        const res = await fetch('http://localhost:3000/users');
-                        if (!res.ok) throw new Error(res.statusText || 'Network error');
-                        const users = await res.json();
+                        const users = await getCombinedUsers();
                         const ul = document.createElement('ul');
-                        users.forEach(u => {
+                        users.forEach((u) => {
                             const li = document.createElement('li');
-                            li.textContent = `${u.id}: ${u.name} (${u.email || 'no email'})`;
+                            const label = u.name || 'No name';
+                            li.textContent = `${u.id || '-'}: ${label} (${u.email || 'no email'})`;
                             ul.appendChild(li);
                         });
                         container.innerHTML = '';
@@ -70,7 +114,7 @@
                     }
                 });
 
-                // Login form validation (client-side lookup against /users)
+            
                 const form = document.getElementById('login-form');
                 let msg = document.getElementById('login-message');
                 if (!msg) {
@@ -83,13 +127,11 @@
                 form.addEventListener('submit', async (e) => {
                     e.preventDefault();
                     msg.textContent = 'Checking credentials...';
-                    const email = document.getElementById('email-login').value.trim();
+                    const email = document.getElementById('email-login').value.trim().toLowerCase();
                     const password = document.getElementById('password-login').value;
                     try {
-                        const res = await fetch('http://localhost:3000/users');
-                        if (!res.ok) throw new Error(res.statusText || 'Network error');
-                        const users = await res.json();
-                        const user = users.find(u => u.email === email);
+                        const users = await getCombinedUsers();
+                        const user = users.find((u) => u.email === email);
                         if (!user) {
                             msg.textContent = 'User not found';
                             return;
@@ -98,7 +140,8 @@
                             msg.textContent = 'Incorrect password';
                             return;
                         }
-                        msg.textContent = `Welcome, ${user.name}! Redirecting...`;
+                        const displayName = user.name || user.email;
+                        msg.textContent = `Welcome, ${displayName}! Redirecting...`;
                         setTimeout(() => { window.location.href = 'index.html'; }, 800);
                     } catch (err) {
                         msg.textContent = 'Login failed';
