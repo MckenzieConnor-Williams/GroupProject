@@ -4,21 +4,38 @@
         <title>HomePage</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <link rel="stylesheet" href="index.css">
-          <link rel="stylesheet" href="Style.css">
-    </head>
+
+        <!-- Main CSS -->
+        <link rel="stylesheet" href="style.css">
+        <!-- Page Specific CSS -->
+        <link rel="stylesheet" href="homepage.css">
+    </head> 
 
     <body>
+    <header>
+        <!-- Header -->
         <h1 class ="title">SyntaxStudy</h1>
+        
+    <nav class = "navbar">
+        <div class = "nav-left">
+            <a href="#" class="study-tools">Study Tools</a> 
+            <a href="#" class="subject-area">Subject Area</a> 
+        </div>
 
-        <nav>
-        <a href="#" class="StudyTools">Study Tools</a> 
-         <a href="#" class="Subject Area">Subject Area</a> 
-         <a href="#" class="Login">Login</a> 
-         <a href="#" class="SignUp">Sign Up</a> 
-         <a href="#" class="Create">Create</a> 
-        </nav>
+        <div class ="nav-right">
+            <a href="#" class="login">Login</a> 
+            <a href="#" class="signup">Sign Up</a> 
+            <a href="#" class="create">Create</a> 
+        </div>
+    </nav>
+    </header>
 
-    </body>
-
+    <main>
+        <section class="hero">
+            <h2>How do you want to study?</h2>
+            <p>Practice whatever you're learning with SyntaxStudy's interative flashcards, practice tests and study activies</p>
+            <button class="start-btn">Start Studying</button>
+        </section>
+    </main>
+</body>
 </html>
