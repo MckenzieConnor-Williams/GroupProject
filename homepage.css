@@ -1,0 +1,50 @@
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: lightblue;
+    text-align: center;
+}
+
+
+.title {
+    margin-top: 40px;
+    font-size: 40px;
+    color:black;
+}
+
+
+.homeclass {
+    margin-top: 100px;
+}
+
+/* Button style */
+.button {
+    display: inline-block;
+    padding: 20px 10px;
+    margin: 30px;
+    transition: all 0.3s ease;
+
+    background-color: red;
+    color: rgb(4, 0, 0);
+
+    text-decoration:solid;
+    font-size: 17px;
+    font-weight: bold;
+
+    border-radius: 8px;
+
+    
+}
+
+
+.button:hover {
+    background-color:darkred;
+    transform: scale(1.10);
+}
+
+
+.button:active {
+    transform: scale(0.90);
+}
+
+
