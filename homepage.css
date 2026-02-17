@@ -1,0 +1,99 @@
+/*this will be the background */
+body
+{
+    margin: 0;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #c9cfdd;
+    color: #111827
+}
+
+header {
+    background-color: #030213;
+    padding: 20px;
+    color: white;
+}
+
+.title {
+    margin: 0;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+
+
+.navbar 
+{
+    display: flex; /*aligns in a row*/
+    justify-content: space-between; /*space between nav-left and nav-right*/
+    margin-top: 10px; /*Creating Space between title and navbar*/
+}
+
+
+.nav-left a, .nav-right a 
+{
+    margin-right: 15px;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+.nav-left a:hover, .nav-right a:hover 
+{
+    color: #c9cfdd;        /* Darker color on hover */
+    text-decoration: none;
+}
+
+.hero
+{
+    text-align: center; 
+    padding: 40px 100px;
+    font-size: 25px;
+}
+
+.start-btn
+{
+    padding: 12px 26px;
+    font-size: 20px;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #030213; 
+    color: white;
+    border: none; /*remove default button*/
+    border-radius: 6px; /*rounds the corner*/
+    cursor: pointer; /*changes cursor to pointer on hover for interactivity*/
+    margin-top: 10px;
+}
+
+
+
+
+
+/* Make sure the parent container allows positioning */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+
+.dropdown-div {
+    display: none;
+    /* display: block; */
+    position: absolute;
+    top: 100%;       
+    left: 0;
+    background-color: white;
+    min-width: 180px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
+    padding: 8px 0;
+    z-index: 1000;
+}
+
+
+.dropdown-div a {
+    display: block;
+    padding: 10px 15px;
+    text-decoration: none;
+    color: black;
+    font-size: 14px;
+}
+
+

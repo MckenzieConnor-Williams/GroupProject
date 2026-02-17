@@ -4,21 +4,87 @@
         <title>HomePage</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <link rel="stylesheet" href="index.css">
-          <link rel="stylesheet" href="Style.css">
-    </head>
 
+       
+        <link rel="stylesheet" href="style.css">
+       
+        <link rel="stylesheet" href="homepage.css">
+        
+    </head> 
+ 
     <body>
+    <header>
+   
         <h1 class ="title">SyntaxStudy</h1>
+        
+    <nav class = "navbar">
+        <div class = "nav-left">
+            <div class="dropdown">
+                <a href="#" class="nav-option" id="studytool">Study Tools</a>
 
-        <nav>
-        <a href="#" class="StudyTools">Study Tools</a> 
-         <a href="#" class="Subject Area">Subject Area</a> 
-         <a href="#" class="Login">Login</a> 
-         <a href="#" class="SignUp">Sign Up</a> 
-         <a href="#" class="Create">Create</a> 
-        </nav>
+                <div class="dropdown-div" id="dropdown-div-studytools">
+                    <a href="#">Flashcards</a>
+                    <a href="#">Practice Questions</a>
+                    <a href="#">Information</a>
+                </div>
+            </div>
 
-    </body>
+            <div class="dropdown">
+                <a href="#" class="nav-option" id ="topics">Topics</a> 
 
+                <div class="dropdown-div" id="dropdown-div-topics">
+                    <a href="#">Flashcards</a>
+                    <a href="#">Practice Questions</a>
+                    <a href="#">Information</a>
+                </div>
+            </div>
+                
+        </div>
+
+        <div class ="nav-right">
+            <a href="#" class="login">Login</a> 
+            <a href="#" class="signup">Sign Up</a> 
+            <a href="#" class="create">Create</a> 
+        </div>
+   
+    </header>
+
+    <main>
+        <section class="hero">
+            <h2>How do you want to study?</h2>
+            <p>Practice whatever you're learning with SyntaxStudy's interative flashcards, practice tests and study activies</p>
+            <button class="start-btn">Start Studying</button>
+        </section>
+    </main>
+</body>
 </html>
+
+<script>
+    let studyTool = document.getElementById("studytool");
+    let studyToolDiv = document.getElementById("dropdown-div-studytools");
+
+    let topics = document.getElementById("topics");
+    let topicsDiv = document.getElementById("dropdown-div-topics");
+
+    studyTool.onclick = function(){
+        if(studyToolDiv.style.display == "block"){
+            studyToolDiv.style.display = "none";
+        }
+        else{
+            studyToolDiv.style.display = "block";
+        }
+    }
+
+    topics.onclick = function(){
+        if(topicsDiv.style.display == "block"){
+            topicsDiv.style.display = "none";
+        }
+        else{
+            topicsDiv.style.display = "block";
+        }
+    }
+
+   
+
+    let 
+</script>
