@@ -1,0 +1,60 @@
+body
+{
+    margin: 0;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #c9cfdd;
+    color: #111827
+}
+
+header {
+    background-color: #030213;
+    padding: 20px;
+    color: white;
+}
+
+.title {
+    margin: 0;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+/* Navigation */
+
+.navbar 
+{
+    display: flex; /*aligns in a row*/
+    justify-content: space-between; /*space between nav-left and nav-right*/
+    margin-top: 10px; /*Creating Space between title and navbar*/
+}
+
+/*style all linkgs*/
+.nav-left a, .nav-right a 
+{
+    margin-right: 15px;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+.nav-left a:hover, .nav-right a:hover 
+{
+    color: #c9cfdd;        /* Darker color on hover */
+    text-decoration: none;
+}
+
+.hero
+{
+    text-align: center; 
+    padding: 40px 100px;
+}
+
+.start-btn
+{
+    padding: 12px 24px;
+    font-size: 16px;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #030213; 
+    color: white;
+    border: none; /*remove default button*/
+    border-radius: 6px; /*rounds the corner*/
+    cursor: pointer; /*changes cursor to pointer on hover for interactivity*/
+}
