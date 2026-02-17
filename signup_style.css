@@ -1,0 +1,27 @@
+body {
+    display: flex;
+    margin: 0;
+    height: 100vh;
+    justify-content: center;   
+    align-items: center;   
+    background-color: #e0e0e0;
+    font-family: 'Inter', sans-serif;
+    
+}
+.outer-box {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 10px;
+    text-align: left;
+}
+
+.form-box{
+    padding: 30px;
+    border-radius: 8px;
+}
+
+.center-title {
+    text-align: center;
+    align-items: center; 
+   
+}
