@@ -50,7 +50,8 @@
     outline-offset: 1px;
 }
 
-#login-button {
+#login-button,
+#signup-button {
     height: 46px;
     margin-top: 4px;
     margin-bottom: 0;
@@ -61,7 +62,8 @@
     background: linear-gradient(to bottom, var(--button-dark), var(--button-light));
 }
 
-#login-button:hover {
+#login-button:hover,
+#signup-button:hover {
     cursor: pointer;
     filter: brightness(1.08);
 }
@@ -81,4 +83,3 @@
 .login-footer a:hover {
     text-decoration: underline;
 }
-

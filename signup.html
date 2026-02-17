@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="Style.css" />
+        <link rel="stylesheet" href="loginStyle.css" />
+        <title>Sign Up</title>
+    </head>
+    <body>
+        <main class="center-container">
+            <section id="login-container">
+                <h1 id="login-title">Create Account</h1>
+                <p id="login-subtext">Sign up to start your quiz</p>
+
+                <form id="signup-form">
+                    <label for="email-signup" class="bold-label login-label">Email</label>
+                    <input
+                        type="email"
+                        id="email-signup"
+                        name="email-signup"
+                        placeholder="Enter your email"
+                        class="login-item"
+                        required
+                    />
+
+                    <label for="password-signup" class="bold-label login-label">Password</label>
+                    <input
+                        type="password"
+                        id="password-signup"
+                        name="password-signup"
+                        class="login-item"
+                        placeholder="Create a password"
+                        required
+                    />
+
+                    <label for="confirm-password" class="bold-label login-label">Confirm Password</label>
+                    <input
+                        type="password"
+                        id="confirm-password"
+                        name="confirm-password"
+                        class="login-item"
+                        placeholder="Re-enter password"
+                        required
+                    />
+
+                    <input type="submit" value="Sign Up" class="login-item" id="signup-button" />
+                </form>
+
+                <p class="login-footer">
+                    Already have an account?
+                    <a href="login.html">Sign in</a>
+                </p>
+            </section>
+        </main>
+
+        <script>
+            (function () {
+                const LOCAL_USERS_KEY = 'syntaxstudy_users';
+                const form = document.getElementById('signup-form');
+                const msg = document.createElement('div');
+                msg.id = 'signup-message';
+                msg.style.marginTop = '8px';
+                form.parentNode.insertBefore(msg, form.nextSibling);
+
+                function getLocalUsers() {
+                    try {
+                        const raw = localStorage.getItem(LOCAL_USERS_KEY);
+                        const parsed = JSON.parse(raw || '[]');
+                        return Array.isArray(parsed) ? parsed : [];
+                    } catch (err) {
+                        console.error('Failed to parse local users', err);
+                        return [];
+                    }
+                }
+
+                async function getServerUsers() {
+                    try {
+                        const res = await fetch('http://localhost:3000/users');
+                        if (!res.ok) throw new Error(res.statusText || 'Network error');
+                        const users = await res.json();
+                        return Array.isArray(users) ? users : [];
+                    } catch (err) {
+                        return [];
+                    }
+                }
+
+                function saveLocalUsers(users) {
+                    localStorage.setItem(LOCAL_USERS_KEY, JSON.stringify(users));
+                }
+
+                form.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    msg.textContent = '';
+
+                    const email = document.getElementById('email-signup').value.trim().toLowerCase();
+                    const password = document.getElementById('password-signup').value;
+                    const confirmPassword = document.getElementById('confirm-password').value;
+
+                    if (password.length < 6) {
+                        msg.textContent = 'Password must be at least 6 characters';
+                        return;
+                    }
+
+                    if (password !== confirmPassword) {
+                        msg.textContent = 'Passwords do not match';
+                        return;
+                    }
+
+                    const [localUsers, serverUsers] = await Promise.all([
+                        Promise.resolve(getLocalUsers()),
+                        getServerUsers()
+                    ]);
+                    const emailExistsLocally = localUsers.some((u) => (u.email || '').toLowerCase() === email);
+                    const emailExistsOnServer = serverUsers.some((u) => (u.email || '').toLowerCase() === email);
+
+                    if (emailExistsLocally || emailExistsOnServer) {
+                        msg.textContent = 'An account with this email already exists';
+                        return;
+                    }
+
+                    const newUser = {
+                        id: Date.now(),
+                        name: email.split('@')[0],
+                        email,
+                        password
+                    };
+
+                    localUsers.push(newUser);
+                    saveLocalUsers(localUsers);
+                    msg.textContent = 'Account created. Redirecting to login...';
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 900);
+                });
+            })();
+        </script>
+    </body>
+</html>
