@@ -34,8 +34,14 @@
         <section class="hero">
             <h2>How do you want to study?</h2>
             <p>Practice whatever you're learning with SyntaxStudy's interative flashcards, practice tests and study activies</p>
-            <button class="start-btn">Start Studying</button>
+            <button id="signup-btn" class="start-btn">Start Studying</button>
         </section>
     </main>
 </body>
 </html>
+<script>
+    let signup_btn = document.getElementById("signup-btn");
+    signup_btn.onclick = function(){
+        window.location.href="signup.html";
+    }
+</script>
