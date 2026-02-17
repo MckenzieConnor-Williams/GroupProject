@@ -74,11 +74,7 @@
 
 .login-footer a {
     color: var(--text-primary);
-<<<<<<< HEAD
     font-weight: 600;
-=======
-    font-weight: 600; 
->>>>>>> dev-25908645
     text-decoration: none;
 }
 
