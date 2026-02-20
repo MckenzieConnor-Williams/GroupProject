@@ -2,12 +2,46 @@
 <html>
     <head>
         <title>HomePage</title>
-          <link rel="stylesheet" href="index.css">
-    </head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- Main CSS -->
+        <link rel="stylesheet" href="style.css">
+        <!-- Page Specific CSS -->
+        <link rel="stylesheet" href="homepage.css">
+    </head> 
 
     <body>
+    <header>
+        <!-- Header -->
         <h1 class ="title">SyntaxStudy</h1>
-        <a href="#" class="HomeButton">Next Page</a>
-    </body>
+        
+    <nav class = "navbar">
+        <div class = "nav-left">
+            <a href="#" class="study-tools">Study Tools</a> 
+            <a href="#" class="subject-area">Subject Area</a> 
+        </div>
 
+        <div class ="nav-right">
+            <a href="login.html" class="login">Login</a> 
+            <a href="signup.html" class="signup">Sign Up</a> 
+            <a href="#" class="create">Create</a> 
+        </div>
+    </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h2>How do you want to study?</h2>
+            <p>Practice whatever you're learning with SyntaxStudy's interative flashcards, practice tests and study activies</p>
+            <button id="signup-btn" class="start-btn">Start Studying</button>
+        </section>
+    </main>
+</body>
 </html>
+<script>
+    let signup_btn = document.getElementById("signup-btn");
+    signup_btn.onclick = function(){
+        window.location.href="signup.html";
+    }
+</script>
