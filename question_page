@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quiz Master</title>
+    <style>
+        :root {
+            --page-bg: #c9cfdd;
+            --card-bg: #f3f3f3;
+            --text-primary: #111827;
+            --text-muted: #6b7280;
+            --accent-dark: #02021a;
+            --input-bg: #e8e8eb;
+            --border: #d7d9df;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--page-bg);
+            color: var(--text-primary);
+        }
+
+        .page {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 42px 20px 56px;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .hero h1 {
+            margin: 0;
+            font-size: clamp(36px, 5vw, 62px);
+            line-height: 1.05;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .hero p {
+            margin: 12px 0 0;
+            font-size: clamp(18px, 2.2vw, 24px);
+            color: #46505f;
+        }
+
+        .tab-switch {
+            margin: 26px auto 30px;
+            width: 100%;
+            background: #d7d7dc;
+            border-radius: 20px;
+            padding: 4px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .tab-btn {
+            border: 0;
+            border-radius: 16px;
+            background: transparent;
+            color: #191c24;
+            font-size: 20px;
+            font-weight: 700;
+            padding: 14px 16px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .tab-btn.active {
+            background: #efefef;
+        }
+
+        .icon {
+            width: 22px;
+            height: 22px;
+            color: currentColor;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            padding: 28px;
+        }
+
+        .create-title {
+            margin: 0 0 24px;
+            font-size: 40px;
+            font-weight: 800;
+            color: #171923;
+        }
+
+        .field-group {
+            margin-bottom: 18px;
+        }
+
+        .field-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 34px;
+            font-weight: 700;
+            color: #1b1d25;
+        }
+
+        .field-group input {
+            width: 100%;
+            border: 0;
+            border-radius: 14px;
+            background: var(--input-bg);
+            font-size: 34px;
+            color: var(--text-primary);
+            padding: 16px 22px;
+            outline: 2px solid transparent;
+            transition: outline-color 0.18s ease;
+        }
+
+        .field-group input::placeholder {
+            color: #6f7686;
+        }
+
+        .field-group input:focus {
+            outline-color: #7f8fb0;
+        }
+
+        .add-btn {
+            width: 100%;
+            border: 0;
+            border-radius: 14px;
+            background: var(--accent-dark);
+            color: #fff;
+            font-size: 36px;
+            font-weight: 700;
+            padding: 16px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+        }
+
+        .add-btn:hover {
+            background: #0b0d28;
+        }
+
+        .add-symbol {
+            font-size: 44px;
+            line-height: 1;
+            font-weight: 400;
+        }
+
+        .questions-wrap {
+            margin-top: 44px;
+        }
+
+        .questions-wrap h2 {
+            margin: 0 0 18px;
+            font-size: 52px;
+            font-weight: 800;
+            color: #1a2133;
+        }
+
+        .empty-state {
+            text-align: center;
+            min-height: 270px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .empty-state p {
+            margin: 0;
+            font-size: 42px;
+            color: #697083;
+        }
+
+        .questions-list {
+            display: grid;
+            gap: 14px;
+        }
+
+        .question-item {
+            background: #ececef;
+            border: 1px solid #d7d9df;
+            border-radius: 14px;
+            padding: 16px 18px;
+        }
+
+        .question-item h3 {
+            margin: 0 0 6px;
+            font-size: 22px;
+        }
+
+        .question-item p {
+            margin: 0;
+            color: #4f5667;
+            font-size: 18px;
+        }
+
+        @media (max-width: 1024px) {
+            .create-title {
+                font-size: 32px;
+            }
+
+            .field-group label,
+            .field-group input {
+                font-size: 24px;
+            }
+
+            .add-btn {
+                font-size: 24px;
+            }
+
+            .questions-wrap h2 {
+                font-size: 36px;
+            }
+
+            .empty-state p {
+                font-size: 28px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .page {
+                padding: 30px 14px 40px;
+            }
+
+            .hero p {
+                font-size: 16px;
+            }
+
+            .tab-btn {
+                font-size: 16px;
+                padding: 12px 8px;
+            }
+
+            .card {
+                padding: 18px;
+            }
+
+            .field-group label,
+            .field-group input {
+                font-size: 18px;
+            }
+
+            .add-btn {
+                font-size: 20px;
+            }
+
+            .questions-wrap h2 {
+                font-size: 30px;
+            }
+
+            .empty-state {
+                min-height: 210px;
+            }
+
+            .empty-state p {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="page">
+        <section class="hero">
+            <h1>Quiz Master</h1>
+            <p>Create your own questions and test your knowledge</p>
+        </section>
+
+        <section class="tab-switch" aria-label="Mode selection">
+            <button type="button" class="tab-btn active">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M12 6.75v13.5m0-13.5C10.54 5.8 8.47 5.25 6.75 5.25C5.03 5.25 3.38 5.55 2.25 6.15V18c1.13-.6 2.78-.9 4.5-.9 1.72 0 3.79.55 5.25 1.5m0-11.85c1.46-.95 3.53-1.5 5.25-1.5 1.72 0 3.37.3 4.5.9V18c-1.13-.6-2.78-.9-4.5-.9-1.72 0-3.79.55-5.25 1.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Create Questions
+            </button>
+            <button type="button" class="tab-btn" id="take-quiz-btn">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M10 18h4m-6.5-6.5a2.5 2.5 0 1 1 5 0c0 .8-.3 1.2-.8 1.8-.4.4-.7.9-.7 1.7V16h2v-1c0-.3.1-.5.3-.7.7-.7 1.7-1.8 1.7-3.8a4.5 4.5 0 1 0-9 0c0 1.9 1 3.1 1.7 3.8.2.2.3.4.3.7v1h2v-1c0-.8-.3-1.3-.7-1.7-.5-.6-.8-1-.8-1.8Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Take Quiz
+            </button>
+        </section>
+
+        <section class="card">
+            <h2 class="create-title">Create New Question</h2>
+            <form id="question-form">
+                <div class="field-group">
+                    <label for="question-input">Question</label>
+                    <input id="question-input" type="text" placeholder="Enter your question..." required />
+                </div>
+                <div class="field-group">
+                    <label for="answer-input">Answer</label>
+                    <input id="answer-input" type="text" placeholder="Enter the correct answer..." required />
+                </div>
+                <button class="add-btn" type="submit">
+                    <span class="add-symbol">+</span>
+                    Add Question
+                </button>
+            </form>
+        </section>
+
+        <section class="questions-wrap">
+            <h2 id="questions-title">Your Questions (0)</h2>
+            <div class="card">
+                <div id="questions-empty" class="empty-state">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true" style="width:64px;height:64px;color:#767a8d;">
+                        <path d="M12 6.75v13.5m0-13.5C10.54 5.8 8.47 5.25 6.75 5.25C5.03 5.25 3.38 5.55 2.25 6.15V18c1.13-.6 2.78-.9 4.5-.9 1.72 0 3.79.55 5.25 1.5m0-11.85c1.46-.95 3.53-1.5 5.25-1.5 1.72 0 3.37.3 4.5.9V18c-1.13-.6-2.78-.9-4.5-.9-1.72 0-3.79.55-5.25 1.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <p>No questions yet. Create your first question above!</p>
+                </div>
+                <div id="questions-list" class="questions-list" hidden></div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        (function () {
+            const form = document.getElementById("question-form");
+            const questionInput = document.getElementById("question-input");
+            const answerInput = document.getElementById("answer-input");
+            const questionsTitle = document.getElementById("questions-title");
+            const emptyState = document.getElementById("questions-empty");
+            const list = document.getElementById("questions-list");
+            const takeQuizBtn = document.getElementById("take-quiz-btn");
+            const questions = [];
+
+            function renderQuestions() {
+                questionsTitle.textContent = "Your Questions (" + questions.length + ")";
+                list.innerHTML = "";
+
+                if (questions.length === 0) {
+                    emptyState.hidden = false;
+                    list.hidden = true;
+                    return;
+                }
+
+                emptyState.hidden = true;
+                list.hidden = false;
+
+                questions.forEach((item, idx) => {
+                    const card = document.createElement("article");
+                    card.className = "question-item";
+                    card.innerHTML =
+                        "<h3>Q" + (idx + 1) + ": " + item.question + "</h3>" +
+                        "<p><strong>Answer:</strong> " + item.answer + "</p>";
+                    list.appendChild(card);
+                });
+            }
+
+            form.addEventListener("submit", function (event) {
+                event.preventDefault();
+                const question = questionInput.value.trim();
+                const answer = answerInput.value.trim();
+
+                if (!question || !answer) {
+                    return;
+                }
+
+                questions.push({ question: question, answer: answer });
+                renderQuestions();
+                form.reset();
+                questionInput.focus();
+            });
+
+            takeQuizBtn.addEventListener("click", function () {
+                window.location.href = "quiz.html";
+            });
+
+            renderQuestions();
+        })();
+    </script>
+</body>
+</html>
