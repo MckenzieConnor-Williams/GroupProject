@@ -21,7 +21,7 @@ header {
     letter-spacing: 0.2px;
 }
 
-/* Navigation */
+
 
 .navbar
 {
@@ -33,7 +33,7 @@ header {
     flex-wrap: wrap;
 }
 
-/* style all links */
+
 .nav-left a, .nav-right a
 {
     display: inline-flex;
