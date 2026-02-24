@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
        
-        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="Style.css">
        
         <link rel="stylesheet" href="homepage.css">
         
@@ -59,30 +59,4 @@
 </body>
 </html>
 
-<script>
-    let studyTool = document.getElementById("studytool");
-    let studyToolDiv = document.getElementById("dropdown-div-studytools");
-
-    let topics = document.getElementById("topics");
-    let topicsDiv = document.getElementById("dropdown-div-topics");
-
-    studyTool.onclick = function(){
-        if(studyToolDiv.style.display == "block"){
-            studyToolDiv.style.display = "none";
-        }
-        else{
-            studyToolDiv.style.display = "block";
-            topicsDiv.style.display = "none";
-        }
-    }
-
-    topics.onclick = function(){
-        if(topicsDiv.style.display == "block"){
-            topicsDiv.style.display = "none";
-        }
-        else{
-            topicsDiv.style.display = "block";
-            studyToolDiv.style.display = "none";
-        }
-    }
-</script>
+<script src="homepage.js"></script>
