@@ -6,11 +6,11 @@ let topicsDiv = document.getElementById("dropdown-div-topics");
 
 let signupBtn = document.getElementById("signup-btn");
 
-signupBtn.onclick = function(){
+signupBtn.onclick = () => {
     window.location.href = "signup.html";
 }
 
-studyTool.onclick = function(){
+studyTool.onclick = () => {
     if(studyToolDiv.style.display == "block"){
         studyToolDiv.style.display = "none";
     }
@@ -20,7 +20,7 @@ studyTool.onclick = function(){
     }
 }
 
-topics.onclick = function(){
+topics.onclick = () => {
     if(topicsDiv.style.display == "block"){
         topicsDiv.style.display = "none";
     }
@@ -29,4 +29,3 @@ topics.onclick = function(){
         studyToolDiv.style.display = "none";
     }
 }
-

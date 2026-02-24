@@ -1,0 +1,172 @@
+.page {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 28px 20px 60px;
+}
+
+/* Header */
+.page-header {
+  text-align: center;
+  margin-bottom: 14px;
+}
+
+.page-title {
+  margin: 6px 0 4px;
+  font-size: 44px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.page-subtitle {
+  margin: 0 0 16px;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  width: min(760px, 100%);
+  margin: 0 auto;
+  padding: 6px;
+  gap: 6px;
+
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: 999px;
+}
+
+.tab {
+  flex: 1;
+  height: 44px;
+  border-radius: 999px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  text-decoration: none;
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 14px;
+
+  transition: filter 0.15s ease, transform 0.15s ease;
+}
+
+.tab:hover {
+  filter: brightness(1.05);
+}
+
+.tab--active {
+  background: var(--card-bg);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.06);
+}
+
+/* Cards */
+.card {
+  background-color: var(--card-bg);
+  border-radius: 14px;
+  padding: 26px 22px;
+  margin-top: 16px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+}
+
+.card-title {
+  margin: 0 0 14px;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+/* Form */
+.form {
+  text-align: left;
+}
+
+.field-label {
+  display: block;
+  margin: 14px 0 6px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.field-input {
+  width: 100%;
+  border: none;
+  border-radius: 12px;
+  padding: 14px;
+  background-color: var(--input-bg);
+  color: var(--text-primary);
+  font-size: 14px;
+  resize: vertical;
+}
+
+.field-input::placeholder {
+  color: var(--text-placeholder);
+}
+
+.field-input:focus {
+  outline: 2px solid rgba(17, 24, 39, 0.25);
+  outline-offset: 2px;
+}
+
+/* Button */
+.primary-btn {
+  width: 100%;
+  margin-top: 16px;
+  height: 48px;
+
+  border: none;
+  border-radius: 12px;
+
+  background: linear-gradient(to bottom, var(--button-dark), var(--button-light));
+  color: #fff;
+
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.primary-btn:hover {
+  filter: brightness(1.08);
+}
+
+.primary-btn:active {
+  transform: translateY(1px);
+}
+
+.btn-plus {
+  font-size: 18px;
+}
+
+/* Section title */
+.section-title {
+  margin: 22px 0 0;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+/* Empty state */
+.empty-state {
+  text-align: center;
+  padding: 34px 10px;
+  color: var(--text-muted);
+}
+
+.empty-icon {
+  font-size: 40px;
+  margin-bottom: 10px;
+}
+
+.empty-text {
+  margin: 0;
+  font-size: 14px;
+}
+
+.question-list {
+  display: grid;
+  gap: 12px;
+}

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="Style.css" />
+    <link rel="stylesheet" href="createQuestions.css" />
+
+    <title>Quiz Master - Create Questions</title>
+  </head>
+
+  <body>
+    <main class="page">
+      <!-- Header -->
+      <header class="page-header">
+        <h1 class="page-title">Quiz Master</h1>
+        <p class="page-subtitle">Create your own questions and test your knowledge</p>
+
+        <!-- Tabs -->
+        <nav class="tabs" aria-label="Quiz pages">
+          <a class="tab tab--active" href="createQuestions.html" aria-current="page">
+            Create Questions
+          </a>
+          <a class="tab" href="takeQuiz.html">Take Quiz</a>
+        </nav>
+      </header>
+
+      <!-- Create Question Card -->
+      <section class="card">
+        <h2 class="card-title">Create New Question</h2>
+
+        <!-- JS hook into IDs later -->
+        <form id="create-question-form" class="form">
+          <label class="field-label" for="question-input">Question</label>
+          <textarea
+            id="question-input"
+            class="field-input"
+            placeholder="Enter your question..."
+            rows="3"
+            required
+          ></textarea>
+
+          <label class="field-label" for="answer-input">Answer</label>
+          <textarea
+            id="answer-input"
+            class="field-input"
+            placeholder="Enter the correct answer..."
+            rows="2"
+            required
+          ></textarea>
+
+          <button id="add-question-btn" class="primary-btn" type="submit">
+            <span class="btn-plus" aria-hidden="true">＋</span>
+            Add Question
+          </button>
+        </form>
+      </section>
+
+      <!-- Questions list -->
+      <h2 class="section-title">
+        Your Questions (<span id="question-count">0</span>)
+      </h2>
+
+      <section class="card">
+        <div id="empty-state" class="empty-state">
+          <div class="empty-icon" aria-hidden="true">📖</div>
+          <p class="empty-text">No questions yet. Create your first question above!</p>
+        </div>
+
+        <!-- JS will render saved questions here later -->
+        <div id="question-list" class="question-list" hidden></div>
+      </section>
+    </main>
+  </body>
+</html>
