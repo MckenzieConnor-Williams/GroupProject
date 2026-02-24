@@ -1,3 +1,4 @@
+/*this will be the background */
 body
 {
     margin: 0;
@@ -18,7 +19,7 @@ header {
     font-weight: bold;
 }
 
-/* Navigation */
+
 
 .navbar 
 {
@@ -27,7 +28,7 @@ header {
     margin-top: 10px; /*Creating Space between title and navbar*/
 }
 
-/*style all linkgs*/
+
 .nav-left a, .nav-right a 
 {
     margin-right: 15px;
@@ -45,16 +46,54 @@ header {
 {
     text-align: center; 
     padding: 40px 100px;
+    font-size: 25px;
 }
 
 .start-btn
 {
-    padding: 12px 24px;
-    font-size: 16px;
+    padding: 12px 26px;
+    font-size: 20px;
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     background-color: #030213; 
     color: white;
     border: none; /*remove default button*/
     border-radius: 6px; /*rounds the corner*/
     cursor: pointer; /*changes cursor to pointer on hover for interactivity*/
+    margin-top: 10px;
 }
+
+
+
+
+
+/* Make sure the parent container allows positioning */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+
+.dropdown-div {
+    display: none;
+    /* display: block; */
+    position: absolute;
+    top: 100%;       
+    left: 0;
+    background-color: white;
+    min-width: 180px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
+    padding: 8px 0;
+    z-index: 1000;
+}
+
+
+.dropdown-div a {
+    display: block;
+    padding: 10px 15px;
+    text-decoration: none;
+    color: black;
+    font-size: 14px;
+}
+
+
