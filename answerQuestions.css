@@ -1,0 +1,38 @@
+body
+{
+    margin: 0;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #c9cfdd;
+    color: #111827;
+}
+
+header {
+    background-color: #030213;
+    padding: 20px;
+    color: white;
+}
+
+.title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.hero
+{
+    text-align: center; 
+    padding: 0px;
+    font-size: 15px;
+}
+.questions-btn
+{
+    padding: 302px 306px;
+    font-size: 20px;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #030213; 
+    color: white;
+    border: none; /*remove default button*/
+    border-radius: 6px; /*rounds the corner*/
+    cursor: pointer; /*changes cursor to pointer on hover for interactivity*/
+    margin-top: 10px;
+}
