@@ -53,10 +53,59 @@
         <section class="hero">
             <h2>How do you want to study?</h2>
             <p>Practice whatever you're learning with SyntaxStudy's interative flashcards, practice tests and study activies</p>
-            <button id="signup-btn" class="start-btn">Start Studying</button>
+            <button class="start-btn">Start Studying</button>
         </section>
+
+        <section class="interative-btn">
+            <button class ="menu-btn">Learn</button>
+            <button class ="menu-btn">Study Guides</button>
+            <button class ="menu-btn">Flashcards</button>
+            <button class ="menu-btn">Practise Test</button>
+        </section>
+
     </main>
 </body>
 </html>
 
-<script src="homepage.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+    let studyTool = document.getElementById("studytool");
+    let studyToolDiv = document.getElementById("dropdown-div-studytools");
+
+    let topics = document.getElementById("topics");
+    let topicsDiv = document.getElementById("dropdown-div-topics");
+
+    studyTool.onclick = function(){
+        if(studyToolDiv.style.display == "block"){
+            studyToolDiv.style.display = "none";
+        }
+        else{
+            studyToolDiv.style.display = "block";
+            topicsDiv.style.display = "none";
+        }
+    }
+
+    topics.onclick = function(){
+        if(topicsDiv.style.display == "block"){
+            topicsDiv.style.display = "none";
+        }
+        else{
+            topicsDiv.style.display = "block";
+            studyToolDiv.style.display = "none";
+        }
+    }
+</script>
