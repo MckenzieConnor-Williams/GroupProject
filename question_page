@@ -330,6 +330,9 @@
 
     <script>
         (function () {
+            const CURRENT_USER_KEY = "syntaxstudy_current_user";
+            const QUESTION_BANK_KEY = "syntaxstudy_question_bank";
+
             const form = document.getElementById("question-form");
             const questionInput = document.getElementById("question-input");
             const answerInput = document.getElementById("answer-input");
@@ -337,9 +340,49 @@
             const emptyState = document.getElementById("questions-empty");
             const list = document.getElementById("questions-list");
             const takeQuizBtn = document.getElementById("take-quiz-btn");
-            const questions = [];
+
+            function getCurrentUserEmail() {
+                try {
+                    const raw = localStorage.getItem(CURRENT_USER_KEY);
+                    const user = JSON.parse(raw || "{}");
+                    return (user.email || "").toLowerCase().trim();
+                } catch (err) {
+                    return "";
+                }
+            }
+
+            function getBankMap() {
+                try {
+                    const raw = localStorage.getItem(QUESTION_BANK_KEY);
+                    const parsed = JSON.parse(raw || "{}");
+                    return parsed && typeof parsed === "object" ? parsed : {};
+                } catch (err) {
+                    return {};
+                }
+            }
+
+            function setBankMap(nextMap) {
+                localStorage.setItem(QUESTION_BANK_KEY, JSON.stringify(nextMap));
+            }
+
+            function getUserQuestions() {
+                const email = getCurrentUserEmail();
+                if (!email) return [];
+                const bank = getBankMap();
+                const questions = bank[email];
+                return Array.isArray(questions) ? questions : [];
+            }
+
+            function saveUserQuestions(questions) {
+                const email = getCurrentUserEmail();
+                if (!email) return;
+                const bank = getBankMap();
+                bank[email] = questions;
+                setBankMap(bank);
+            }
 
             function renderQuestions() {
+                const questions = getUserQuestions();
                 questionsTitle.textContent = "Your Questions (" + questions.length + ")";
                 list.innerHTML = "";
 
@@ -352,7 +395,7 @@
                 emptyState.hidden = true;
                 list.hidden = false;
 
-                questions.forEach((item, idx) => {
+                questions.forEach(function (item, idx) {
                     const card = document.createElement("article");
                     card.className = "question-item";
                     card.innerHTML =
@@ -364,21 +407,33 @@
 
             form.addEventListener("submit", function (event) {
                 event.preventDefault();
-                const question = questionInput.value.trim();
-                const answer = answerInput.value.trim();
-
-                if (!question || !answer) {
+                const email = getCurrentUserEmail();
+                if (!email) {
+                    alert("Please login first.");
+                    window.location.href = "login.html";
                     return;
                 }
 
+                const question = questionInput.value.trim();
+                const answer = answerInput.value.trim();
+                if (!question || !answer) return;
+
+                const questions = getUserQuestions();
                 questions.push({ question: question, answer: answer });
+                saveUserQuestions(questions);
                 renderQuestions();
                 form.reset();
                 questionInput.focus();
             });
 
             takeQuizBtn.addEventListener("click", function () {
-                window.location.href = "quiz.html";
+                const email = getCurrentUserEmail();
+                if (!email) {
+                    alert("Please login first.");
+                    window.location.href = "login.html";
+                    return;
+                }
+                window.location.href = "question_answer";
             });
 
             renderQuestions();

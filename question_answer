@@ -1,1 +1,228 @@
 <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Take Quiz</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background: #c9cfdd;
+            color: #111827;
+        }
+
+        .page {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 36px 16px;
+        }
+
+        .card {
+            background: #f3f3f3;
+            border: 1px solid #d7d9df;
+            border-radius: 16px;
+            padding: 22px;
+        }
+
+        .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 14px;
+            color: #4b5563;
+            font-size: 14px;
+        }
+
+        .question {
+            font-size: 24px;
+            font-weight: 700;
+            margin: 10px 0 16px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            border: 1px solid #cdd3de;
+            border-radius: 10px;
+            padding: 12px;
+            font-size: 16px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 14px;
+        }
+
+        button {
+            border: 0;
+            border-radius: 10px;
+            padding: 10px 14px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .primary {
+            background: #0f172a;
+            color: #fff;
+        }
+
+        .secondary {
+            background: #e5e7eb;
+            color: #111827;
+        }
+
+        .message {
+            margin-top: 12px;
+            min-height: 22px;
+            color: #1f2937;
+        }
+    </style>
+</head>
+<body>
+    <main class="page">
+        <div class="card">
+            <div class="top">
+                <span id="progress">Question 0 of 0</span>
+                <span id="score">Score: 0</span>
+            </div>
+            <h1 class="question" id="question-text">Loading...</h1>
+            <input id="answer-input" type="text" placeholder="Type your answer..." />
+            <div class="actions">
+                <button class="primary" id="submit-btn" type="button">Submit</button>
+                <button class="secondary" id="next-btn" type="button" disabled>Next</button>
+                <button class="secondary" id="back-btn" type="button">Back</button>
+            </div>
+            <div class="message" id="message"></div>
+        </div>
+    </main>
+
+    <script>
+        (function () {
+            const CURRENT_USER_KEY = "syntaxstudy_current_user";
+            const QUESTION_BANK_KEY = "syntaxstudy_question_bank";
+
+            const progressEl = document.getElementById("progress");
+            const scoreEl = document.getElementById("score");
+            const questionEl = document.getElementById("question-text");
+            const answerInput = document.getElementById("answer-input");
+            const messageEl = document.getElementById("message");
+            const submitBtn = document.getElementById("submit-btn");
+            const nextBtn = document.getElementById("next-btn");
+            const backBtn = document.getElementById("back-btn");
+
+            let questions = [];
+            let currentIndex = 0;
+            let score = 0;
+            let submitted = false;
+
+            function shuffle(array) {
+                const arr = array.slice();
+                for (let i = arr.length - 1; i > 0; i -= 1) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    const temp = arr[i];
+                    arr[i] = arr[j];
+                    arr[j] = temp;
+                }
+                return arr;
+            }
+
+            function getCurrentUserEmail() {
+                try {
+                    const raw = localStorage.getItem(CURRENT_USER_KEY);
+                    const user = JSON.parse(raw || "{}");
+                    return (user.email || "").toLowerCase().trim();
+                } catch (err) {
+                    return "";
+                }
+            }
+
+            function getUserQuestions() {
+                const email = getCurrentUserEmail();
+                if (!email) return [];
+                try {
+                    const raw = localStorage.getItem(QUESTION_BANK_KEY);
+                    const bank = JSON.parse(raw || "{}");
+                    const userQuestions = bank[email];
+                    return Array.isArray(userQuestions) ? userQuestions : [];
+                } catch (err) {
+                    return [];
+                }
+            }
+
+            function render() {
+                if (questions.length === 0) {
+                    progressEl.textContent = "Question 0 of 0";
+                    scoreEl.textContent = "Score: 0";
+                    questionEl.textContent = "No questions in your bank yet. Add some first.";
+                    answerInput.disabled = true;
+                    submitBtn.disabled = true;
+                    nextBtn.disabled = true;
+                    return;
+                }
+
+                if (currentIndex >= questions.length) {
+                    progressEl.textContent = "Completed";
+                    scoreEl.textContent = "Final Score: " + score + " / " + questions.length;
+                    questionEl.textContent = "Quiz finished.";
+                    messageEl.textContent = "Great work. Go add more questions or retake for new random order.";
+                    answerInput.value = "";
+                    answerInput.disabled = true;
+                    submitBtn.disabled = true;
+                    nextBtn.disabled = true;
+                    return;
+                }
+
+                const item = questions[currentIndex];
+                progressEl.textContent = "Question " + (currentIndex + 1) + " of " + questions.length;
+                scoreEl.textContent = "Score: " + score;
+                questionEl.textContent = item.question;
+                answerInput.value = "";
+                answerInput.disabled = false;
+                submitBtn.disabled = false;
+                nextBtn.disabled = true;
+                messageEl.textContent = "";
+                submitted = false;
+                answerInput.focus();
+            }
+
+            submitBtn.addEventListener("click", function () {
+                if (submitted || currentIndex >= questions.length) return;
+                const userAnswer = answerInput.value.trim().toLowerCase();
+                const correctAnswer = (questions[currentIndex].answer || "").trim().toLowerCase();
+                submitted = true;
+
+                if (userAnswer === correctAnswer) {
+                    score += 1;
+                    messageEl.textContent = "Correct!";
+                } else {
+                    messageEl.textContent = 'Incorrect. Correct answer: "' + questions[currentIndex].answer + '"';
+                }
+
+                scoreEl.textContent = "Score: " + score;
+                nextBtn.disabled = false;
+            });
+
+            nextBtn.addEventListener("click", function () {
+                if (!submitted) return;
+                currentIndex += 1;
+                render();
+            });
+
+            backBtn.addEventListener("click", function () {
+                window.location.href = "question_page";
+            });
+
+            const email = getCurrentUserEmail();
+            if (!email) {
+                window.location.href = "login.html";
+                return;
+            }
+
+            questions = shuffle(getUserQuestions());
+            render();
+        })();
+    </script>
+</body>
+</html>
