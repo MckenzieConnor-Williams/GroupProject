@@ -11,6 +11,24 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+function isMongoReady() {
+  return mongoose.connection.readyState === 1;
+}
+
+function ensureDatabaseAvailable(res) {
+  if (!process.env.MONGO_URI) {
+    res.status(503).json({ message: 'Database is not configured. Set MONGO_URI in .env.' });
+    return false;
+  }
+
+  if (!isMongoReady()) {
+    res.status(503).json({ message: 'Database is unavailable. Start MongoDB and try again.' });
+    return false;
+  }
+
+  return true;
+}
+
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
@@ -22,17 +40,23 @@ app.get('/question_page', (req, res) => {
 
 app.get('/question_answer', (req, res) => {
   res.type('html');
-  res.sendFile(path.join(__dirname, 'question_answer'));
+  res.sendFile(path.join(__dirname, 'question_answer.html'));
 });
 
 app.use(express.static(path.join(__dirname)));
 
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('MongoDB Connected'))
-  .catch((err) => console.log(err));
+if (process.env.MONGO_URI) {
+  mongoose.connect(process.env.MONGO_URI)
+    .then(() => console.log('MongoDB Connected'))
+    .catch((err) => console.log(err));
+} else {
+  console.warn('MONGO_URI is not set. Running without MongoDB connection.');
+}
 
 app.post('/api/signup', async (req, res) => {
   try {
+    if (!ensureDatabaseAvailable(res)) return;
+
     const email = (req.body.email || '').trim().toLowerCase();
     const password = req.body.password || '';
     const name = (req.body.name || email.split('@')[0] || '').trim();
@@ -60,6 +84,8 @@ app.post('/api/signup', async (req, res) => {
 
 app.post('/api/login', async (req, res) => {
   try {
+    if (!ensureDatabaseAvailable(res)) return;
+
     const email = (req.body.email || '').trim().toLowerCase();
     const password = req.body.password || '';
 

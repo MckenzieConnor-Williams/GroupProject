@@ -117,6 +117,14 @@
             let score = 0;
             let submitted = false;
 
+            function normalizeAnswer(value) {
+                return String(value || "")
+                    .toLowerCase()
+                    .trim()
+                    .replace(/[^\w\s]|_/g, "")
+                    .replace(/\s+/g, " ");
+            }
+
             function shuffle(array) {
                 const arr = array.slice();
                 for (let i = arr.length - 1; i > 0; i -= 1) {
@@ -189,8 +197,12 @@
 
             submitBtn.addEventListener("click", function () {
                 if (submitted || currentIndex >= questions.length) return;
-                const userAnswer = answerInput.value.trim().toLowerCase();
-                const correctAnswer = (questions[currentIndex].answer || "").trim().toLowerCase();
+                const userAnswer = normalizeAnswer(answerInput.value);
+                const correctAnswer = normalizeAnswer(questions[currentIndex].answer);
+                if (!userAnswer) {
+                    messageEl.textContent = "Please enter an answer before submitting.";
+                    return;
+                }
                 submitted = true;
 
                 if (userAnswer === correctAnswer) {
@@ -201,7 +213,10 @@
                 }
 
                 scoreEl.textContent = "Score: " + score;
+                answerInput.disabled = true;
+                submitBtn.disabled = true;
                 nextBtn.disabled = false;
+                nextBtn.focus();
             });
 
             nextBtn.addEventListener("click", function () {
@@ -212,6 +227,18 @@
 
             backBtn.addEventListener("click", function () {
                 window.location.href = "question_page";
+            });
+
+            answerInput.addEventListener("keydown", function (event) {
+                if (event.key !== "Enter") return;
+                event.preventDefault();
+                if (!submitted) {
+                    submitBtn.click();
+                    return;
+                }
+                if (!nextBtn.disabled) {
+                    nextBtn.click();
+                }
             });
 
             const email = getCurrentUserEmail();
