@@ -1,0 +1,136 @@
+body {
+    margin: 0;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #c9cfdd;
+    color: #111827;
+}
+
+.page-header {
+    background-color: #030213;
+    color: #ffffff;
+    padding: 18px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.page-header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.page-header a {
+    color: #030213;
+    background: #ffffff;
+    text-decoration: none;
+    border-radius: 999px;
+    padding: 8px 14px;
+    font-weight: 700;
+}
+
+.content {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 30px 16px 56px;
+}
+
+.flashcard-dropdown-section {
+    background: #f3f5fb;
+    border: 1px solid #d9deec;
+    border-radius: 16px;
+    padding: 24px;
+}
+
+.flashcard-dropdown-section h2 {
+    margin: 0 0 8px;
+    font-size: 28px;
+}
+
+.flashcards-status {
+    margin: 0 0 12px;
+    color: #42506a;
+}
+
+.flashcard-select {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #c7cfdf;
+    font-size: 16px;
+    background-color: #ffffff;
+    color: #111827;
+}
+
+.flashcard-preview {
+    margin-top: 14px;
+    perspective: 1000px;
+    cursor: pointer;
+}
+
+.flashcard-inner {
+    position: relative;
+    min-height: 260px;
+    transition: transform 0.45s ease;
+    transform-style: preserve-3d;
+}
+
+.flashcard-preview.flipped .flashcard-inner {
+    transform: rotateY(180deg);
+}
+
+.flashcard-face {
+    position: absolute;
+    inset: 0;
+    border: 1px solid #d6deed;
+    border-radius: 12px;
+    background: #ffffff;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    backface-visibility: hidden;
+}
+
+.flashcard-preview h3 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.flashcard-preview p {
+    margin: 0;
+    color: #334155;
+    font-size: 20px;
+}
+
+.flashcard-back {
+    transform: rotateY(180deg);
+    background: #f7f9ff;
+}
+
+.flip-help {
+    margin: 10px 0 8px;
+    color: #4a5670;
+    font-size: 14px;
+}
+
+.actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.action-link {
+    text-decoration: none;
+    background: #030213;
+    color: #ffffff;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-weight: 700;
+}
+
+.action-link.secondary {
+    background: #e8ebf5;
+    color: #111827;
+}

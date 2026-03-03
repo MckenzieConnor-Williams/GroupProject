@@ -1,6 +1,5 @@
 (function () {
     const CURRENT_USER_KEY = "syntaxstudy_current_user";
-    const QUESTION_BANK_KEY = "syntaxstudy_question_bank";
     const QUIZ_SESSION_KEY = "syntaxstudy_quiz_session";
 
     const form = document.getElementById("question-form");
@@ -10,6 +9,7 @@
     const emptyState = document.getElementById("questions-empty");
     const list = document.getElementById("questions-list");
     const takeQuizBtn = document.getElementById("take-quiz-btn");
+    let flashcards = [];
 
     function shuffle(array) {
         const arr = array.slice();
@@ -32,42 +32,34 @@
         }
     }
 
-    function getBankMap() {
+    async function readErrorMessage(response, fallback) {
+        const text = await response.text();
         try {
-            const raw = localStorage.getItem(QUESTION_BANK_KEY);
-            const parsed = JSON.parse(raw || "{}");
-            return parsed && typeof parsed === "object" ? parsed : {};
+            const parsed = JSON.parse(text);
+            return parsed.message || fallback;
         } catch (err) {
-            return {};
+            return text || fallback;
         }
     }
 
-    function setBankMap(nextMap) {
-        localStorage.setItem(QUESTION_BANK_KEY, JSON.stringify(nextMap));
-    }
-
-    function getUserQuestions() {
+    async function loadFlashcards() {
         const email = getCurrentUserEmail();
         if (!email) return [];
-        const bank = getBankMap();
-        const questions = bank[email];
-        return Array.isArray(questions) ? questions : [];
-    }
 
-    function saveUserQuestions(questions) {
-        const email = getCurrentUserEmail();
-        if (!email) return;
-        const bank = getBankMap();
-        bank[email] = questions;
-        setBankMap(bank);
+        const response = await fetch("/api/flashcards?email=" + encodeURIComponent(email));
+        if (!response.ok) {
+            throw new Error(await readErrorMessage(response, "Failed to load flashcards"));
+        }
+
+        const data = await response.json();
+        return Array.isArray(data.flashcards) ? data.flashcards : [];
     }
 
     function renderQuestions() {
-        const questions = getUserQuestions();
-        questionsTitle.textContent = "Your Questions (" + questions.length + ")";
+        questionsTitle.textContent = "Your Questions (" + flashcards.length + ")";
         list.innerHTML = "";
 
-        if (questions.length === 0) {
+        if (flashcards.length === 0) {
             emptyState.hidden = false;
             list.hidden = true;
             return;
@@ -76,17 +68,21 @@
         emptyState.hidden = true;
         list.hidden = false;
 
-        questions.forEach(function (item, idx) {
+        flashcards.forEach(function (item, idx) {
             const card = document.createElement("article");
             card.className = "question-item";
             card.innerHTML =
                 "<h3>Q" + (idx + 1) + ": " + item.question + "</h3>" +
-                "<p><strong>Answer:</strong> " + item.answer + "</p>";
+                "<p><strong>Answer:</strong> " + item.answer + "</p>" +
+                "<div class='question-item-actions'>" +
+                "<button type='button' class='question-action-btn edit-btn' data-id='" + item.id + "'>Edit</button>" +
+                "<button type='button' class='question-action-btn delete-btn' data-id='" + item.id + "'>Delete</button>" +
+                "</div>";
             list.appendChild(card);
         });
     }
 
-    form.addEventListener("submit", function (event) {
+    form.addEventListener("submit", async function (event) {
         event.preventDefault();
         const email = getCurrentUserEmail();
         if (!email) {
@@ -99,12 +95,36 @@
         const answer = answerInput.value.trim();
         if (!question || !answer) return;
 
-        const questions = getUserQuestions();
-        questions.push({ question: question, answer: answer });
-        saveUserQuestions(questions);
-        renderQuestions();
-        form.reset();
-        questionInput.focus();
+        try {
+            const response = await fetch("/api/flashcards", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    userEmail: email,
+                    question: question,
+                    answer: answer
+                })
+            });
+
+            if (!response.ok) {
+                alert(await readErrorMessage(response, "Failed to save flashcard"));
+                return;
+            }
+
+            const data = await response.json();
+            if (data.flashcard) {
+                flashcards.unshift(data.flashcard);
+            } else {
+                flashcards = await loadFlashcards();
+            }
+
+            renderQuestions();
+            form.reset();
+            questionInput.focus();
+        } catch (err) {
+            console.error(err);
+            alert("Cannot reach backend. Run `node server.js` on http://localhost:3000");
+        }
     });
 
     takeQuizBtn.addEventListener("click", function () {
@@ -115,7 +135,7 @@
             return;
         }
 
-        const randomQuestions = shuffle(getUserQuestions());
+        const randomQuestions = shuffle(flashcards);
         localStorage.setItem(
             QUIZ_SESSION_KEY,
             JSON.stringify({
@@ -127,5 +147,101 @@
         window.location.href = "question_answer";
     });
 
-    renderQuestions();
+    list.addEventListener("click", async function (event) {
+        const target = event.target;
+        if (!(target instanceof HTMLElement)) return;
+        const id = target.getAttribute("data-id");
+        if (!id) return;
+
+        const email = getCurrentUserEmail();
+        if (!email) {
+            alert("Please login first.");
+            window.location.href = "login.html";
+            return;
+        }
+
+        if (target.classList.contains("delete-btn")) {
+            if (!confirm("Delete this flashcard?")) return;
+            try {
+                const response = await fetch(
+                    "/api/flashcards/" + encodeURIComponent(id) + "?userEmail=" + encodeURIComponent(email),
+                    { method: "DELETE" }
+                );
+                if (!response.ok) {
+                    alert(await readErrorMessage(response, "Failed to delete flashcard"));
+                    return;
+                }
+                flashcards = flashcards.filter(function (item) {
+                    return item.id !== id;
+                });
+                renderQuestions();
+            } catch (err) {
+                console.error(err);
+                alert("Cannot reach backend. Run `node server.js` on http://localhost:3000");
+            }
+            return;
+        }
+
+        if (target.classList.contains("edit-btn")) {
+            const existing = flashcards.find(function (item) {
+                return item.id === id;
+            });
+            if (!existing) return;
+
+            const nextQuestion = prompt("Edit question:", existing.question);
+            if (nextQuestion === null) return;
+            const nextAnswer = prompt("Edit answer:", existing.answer);
+            if (nextAnswer === null) return;
+
+            const trimmedQuestion = nextQuestion.trim();
+            const trimmedAnswer = nextAnswer.trim();
+            if (!trimmedQuestion || !trimmedAnswer) {
+                alert("Question and answer are required.");
+                return;
+            }
+
+            try {
+                const response = await fetch("/api/flashcards/" + encodeURIComponent(id), {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        userEmail: email,
+                        question: trimmedQuestion,
+                        answer: trimmedAnswer
+                    })
+                });
+                if (!response.ok) {
+                    alert(await readErrorMessage(response, "Failed to update flashcard"));
+                    return;
+                }
+                const data = await response.json();
+                const updated = data.flashcard;
+                flashcards = flashcards.map(function (item) {
+                    return item.id === id ? updated : item;
+                });
+                renderQuestions();
+            } catch (err) {
+                console.error(err);
+                alert("Cannot reach backend. Run `node server.js` on http://localhost:3000");
+            }
+        }
+    });
+
+    (async function init() {
+        const email = getCurrentUserEmail();
+        if (!email) {
+            alert("Please login first.");
+            window.location.href = "login.html";
+            return;
+        }
+
+        try {
+            flashcards = await loadFlashcards();
+            renderQuestions();
+        } catch (err) {
+            console.error(err);
+            alert("Unable to load flashcards from database.");
+            renderQuestions();
+        }
+    })();
 })();

@@ -5,6 +5,11 @@
     const createLink = document.getElementById("create-link");
     const logoutLink = document.getElementById("logout-link");
     const startStudyingBtn = document.getElementById("start-studying-btn");
+    const toolsToggle = document.getElementById("study-tools-toggle");
+    const toolsMenu = document.getElementById("study-tools-menu");
+    const viewFlashcardsLink = document.getElementById("view-flashcards-link");
+    const createFlashcardsLink = document.getElementById("create-flashcards-link");
+    const createQuizLink = document.getElementById("create-quiz-link");
 
     function getCurrentUser() {
         try {
@@ -55,6 +60,31 @@
             return;
         }
         window.location.href = "signup.html";
+    });
+
+    toolsToggle.addEventListener("click", function () {
+        const expanded = toolsToggle.getAttribute("aria-expanded") === "true";
+        toolsToggle.setAttribute("aria-expanded", expanded ? "false" : "true");
+        toolsMenu.classList.toggle("open", !expanded);
+    });
+
+    function requireLoginForTool(event) {
+        if (isLoggedIn()) return;
+        event.preventDefault();
+        window.location.href = "signup.html";
+    }
+
+    viewFlashcardsLink.addEventListener("click", requireLoginForTool);
+    createFlashcardsLink.addEventListener("click", requireLoginForTool);
+    createQuizLink.addEventListener("click", requireLoginForTool);
+
+    document.addEventListener("click", function (event) {
+        if (!toolsMenu.classList.contains("open")) return;
+        const target = event.target;
+        if (!(target instanceof Node)) return;
+        if (toolsToggle.contains(target) || toolsMenu.contains(target)) return;
+        toolsMenu.classList.remove("open");
+        toolsToggle.setAttribute("aria-expanded", "false");
     });
 
     updateNav();

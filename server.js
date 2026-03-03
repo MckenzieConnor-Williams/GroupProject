@@ -4,6 +4,7 @@ const path = require('path');
 const express = require('express');
 const mongoose = require('mongoose');
 const User = require('./models/User');
+const Flashcard = require('./models/Flashcard');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -41,6 +42,11 @@ app.get('/question_page', (req, res) => {
 app.get('/question_answer', (req, res) => {
   res.type('html');
   res.sendFile(path.join(__dirname, 'question_answer.html'));
+});
+
+app.get('/flashcards', (req, res) => {
+  res.type('html');
+  res.sendFile(path.join(__dirname, 'flashcards.html'));
 });
 
 app.use(express.static(path.join(__dirname)));
@@ -112,6 +118,139 @@ app.post('/api/login', async (req, res) => {
   } catch (err) {
     console.error(err);
     return res.status(500).json({ message: 'Server error during login' });
+  }
+});
+
+app.get('/api/flashcards', async (req, res) => {
+  try {
+    if (!ensureDatabaseAvailable(res)) return;
+
+    const email = String(req.query.email || '').trim().toLowerCase();
+    if (!email) {
+      return res.status(400).json({ message: 'Email query parameter is required' });
+    }
+
+    const flashcards = await Flashcard
+      .find({ userEmail: email })
+      .sort({ createdAt: -1 })
+      .lean();
+
+    return res.status(200).json({
+      flashcards: flashcards.map((item) => ({
+        id: String(item._id),
+        question: item.question,
+        answer: item.answer,
+        createdAt: item.createdAt
+      }))
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: 'Server error while loading flashcards' });
+  }
+});
+
+app.post('/api/flashcards', async (req, res) => {
+  try {
+    if (!ensureDatabaseAvailable(res)) return;
+
+    const userEmail = String(req.body.userEmail || '').trim().toLowerCase();
+    const question = String(req.body.question || '').trim();
+    const answer = String(req.body.answer || '').trim();
+
+    if (!userEmail) {
+      return res.status(400).json({ message: 'User email is required' });
+    }
+
+    if (!question || !answer) {
+      return res.status(400).json({ message: 'Question and answer are required' });
+    }
+
+    const flashcard = await Flashcard.create({ userEmail, question, answer });
+    return res.status(201).json({
+      message: 'Flashcard created',
+      flashcard: {
+        id: String(flashcard._id),
+        question: flashcard.question,
+        answer: flashcard.answer,
+        createdAt: flashcard.createdAt
+      }
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: 'Server error while creating flashcard' });
+  }
+});
+
+app.put('/api/flashcards/:id', async (req, res) => {
+  try {
+    if (!ensureDatabaseAvailable(res)) return;
+
+    const id = String(req.params.id || '').trim();
+    const userEmail = String(req.body.userEmail || '').trim().toLowerCase();
+    const question = String(req.body.question || '').trim();
+    const answer = String(req.body.answer || '').trim();
+
+    if (!id) {
+      return res.status(400).json({ message: 'Flashcard id is required' });
+    }
+
+    if (!userEmail) {
+      return res.status(400).json({ message: 'User email is required' });
+    }
+
+    if (!question || !answer) {
+      return res.status(400).json({ message: 'Question and answer are required' });
+    }
+
+    const flashcard = await Flashcard.findOneAndUpdate(
+      { _id: id, userEmail },
+      { question, answer },
+      { returnDocument: 'after' }
+    );
+
+    if (!flashcard) {
+      return res.status(404).json({ message: 'Flashcard not found' });
+    }
+
+    return res.status(200).json({
+      message: 'Flashcard updated',
+      flashcard: {
+        id: String(flashcard._id),
+        question: flashcard.question,
+        answer: flashcard.answer,
+        createdAt: flashcard.createdAt
+      }
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: 'Server error while updating flashcard' });
+  }
+});
+
+app.delete('/api/flashcards/:id', async (req, res) => {
+  try {
+    if (!ensureDatabaseAvailable(res)) return;
+
+    const id = String(req.params.id || '').trim();
+    const userEmail = String(req.query.userEmail || '').trim().toLowerCase();
+
+    if (!id) {
+      return res.status(400).json({ message: 'Flashcard id is required' });
+    }
+
+    if (!userEmail) {
+      return res.status(400).json({ message: 'User email is required' });
+    }
+
+    const deleted = await Flashcard.findOneAndDelete({ _id: id, userEmail });
+    if (!deleted) {
+      return res.status(404).json({ message: 'Flashcard not found' });
+    }
+
+    return res.status(200).json({ message: 'Flashcard deleted' });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: 'Server error while deleting flashcard' });
   }
 });
 

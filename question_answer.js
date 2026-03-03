@@ -1,6 +1,5 @@
 (function () {
     const CURRENT_USER_KEY = "syntaxstudy_current_user";
-    const QUESTION_BANK_KEY = "syntaxstudy_question_bank";
     const QUIZ_SESSION_KEY = "syntaxstudy_quiz_session";
 
     const progressEl = document.getElementById("progress");
@@ -46,19 +45,6 @@
         }
     }
 
-    function getUserQuestions() {
-        const email = getCurrentUserEmail();
-        if (!email) return [];
-        try {
-            const raw = localStorage.getItem(QUESTION_BANK_KEY);
-            const bank = JSON.parse(raw || "{}");
-            const userQuestions = bank[email];
-            return Array.isArray(userQuestions) ? userQuestions : [];
-        } catch (err) {
-            return [];
-        }
-    }
-
     function getSessionQuestionsForUser() {
         const email = getCurrentUserEmail();
         if (!email) return [];
@@ -70,6 +56,29 @@
         } catch (err) {
             return [];
         }
+    }
+
+    async function readErrorMessage(response, fallback) {
+        const text = await response.text();
+        try {
+            const parsed = JSON.parse(text);
+            return parsed.message || fallback;
+        } catch (err) {
+            return text || fallback;
+        }
+    }
+
+    async function loadFlashcards() {
+        const email = getCurrentUserEmail();
+        if (!email) return [];
+
+        const response = await fetch("/api/flashcards?email=" + encodeURIComponent(email));
+        if (!response.ok) {
+            throw new Error(await readErrorMessage(response, "Failed to load flashcards"));
+        }
+
+        const data = await response.json();
+        return Array.isArray(data.flashcards) ? data.flashcards : [];
     }
 
     function render() {
@@ -154,15 +163,23 @@
         }
     });
 
-    const email = getCurrentUserEmail();
-    if (!email) {
-        window.location.href = "login.html";
-        return;
-    }
+    (async function init() {
+        const email = getCurrentUserEmail();
+        if (!email) {
+            window.location.href = "login.html";
+            return;
+        }
 
-    questions = getSessionQuestionsForUser();
-    if (questions.length === 0) {
-        questions = shuffle(getUserQuestions());
-    }
-    render();
+        questions = getSessionQuestionsForUser();
+        if (questions.length === 0) {
+            try {
+                questions = shuffle(await loadFlashcards());
+            } catch (err) {
+                console.error(err);
+                messageEl.textContent = "Unable to load your questions from database.";
+                questions = [];
+            }
+        }
+        render();
+    })();
 })();

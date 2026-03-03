@@ -18,7 +18,14 @@
 
     <nav class = "navbar">
         <div class = "nav-left">
-            <a href="#" class="study-tools">Study Tools</a>
+            <div class="nav-dropdown">
+                <button class="nav-dropdown-toggle" id="study-tools-toggle" type="button" aria-expanded="false">Study Tools</button>
+                <div class="nav-dropdown-menu" id="study-tools-menu">
+                    <a href="flashcards" id="view-flashcards-link">View Flashcards</a>
+                    <a href="question_page" id="create-flashcards-link">Create Flashcards</a>
+                    <a href="question_answer" id="create-quiz-link">Create Quiz</a>
+                </div>
+            </div>
             <a href="#" class="subject-area">Subject Area</a>
         </div>
 

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Flashcards</title>
+    <link rel="stylesheet" href="flashcards.css">
+</head>
+<body>
+    <header class="page-header">
+        <h1>Your Flashcards</h1>
+        <a href="index.html">Back to Home</a>
+    </header>
+
+    <main class="content">
+        <section class="flashcard-dropdown-section" aria-labelledby="flashcards-heading">
+            <h2 id="flashcards-heading">Flashcard Library</h2>
+            <p id="flashcards-status" class="flashcards-status">Loading...</p>
+            <select id="flashcard-select" class="flashcard-select" disabled>
+                <option value="">No flashcards available</option>
+            </select>
+            <p class="flip-help">Click the card to flip</p>
+            <div id="flashcard-preview" class="flashcard-preview" hidden role="button" tabindex="0" aria-label="Flip flashcard">
+                <div id="flashcard-inner" class="flashcard-inner">
+                    <article class="flashcard-face flashcard-front">
+                        <h3 id="flashcard-preview-question"></h3>
+                    </article>
+                    <article class="flashcard-face flashcard-back">
+                        <h3>Answer</h3>
+                        <p id="flashcard-preview-answer"></p>
+                    </article>
+                </div>
+            </div>
+            <div class="actions">
+                <a href="question_page" class="action-link">Create Flashcards</a>
+                <a href="question_answer" class="action-link secondary">Create Quiz</a>
+            </div>
+        </section>
+    </main>
+
+    <script src="flashcards.js"></script>
+</body>
+</html>
