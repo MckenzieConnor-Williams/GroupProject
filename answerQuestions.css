@@ -6,33 +6,69 @@ body
     color: #111827;
 }
 
-header {
+header{
+    background-color:#030213;
+    color:white;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    padding:6px 20px;
+    position: relative;
+}
+
+.title{
+    position:absolute;
+    left:20px;
+    margin:0;
+    font-size:18px;
+}
+
+.header-info h3{
+    text-align: center;
+    margin:0;
+    font-size:18px;
+}
+
+.header-info p{
+    margin:0;
+    font-size:14px;
+}
+
+.flashcard
+{
+    width: 50%;
+    height: 550px;
+    margin: 30px auto;
     background-color: #030213;
-    padding: 20px;
     color: white;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    font-size: 22px;
+    justify-content: center;
 }
 
-.title {
-    margin: 0;
-    font-size: 18px;
-    font-weight: bold;
+.hero{
+    text-align:center;
+    padding-top:20px;
 }
 
-.hero
-{
-    text-align: center; 
-    padding: 0px;
-    font-size: 15px;
+.button-group{
+    margin-top:20px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    
 }
-.questions-btn
-{
-    padding: 302px 306px;
-    font-size: 20px;
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #030213; 
-    color: white;
-    border: none; /*remove default button*/
-    border-radius: 6px; /*rounds the corner*/
-    cursor: pointer; /*changes cursor to pointer on hover for interactivity*/
-    margin-top: 10px;
+
+.nav-btn{
+    padding:12px 28px;
+    background-color:#030213;
+    color:white;
+    border:none;
+    border-radius:6px;
+    font-size:15px;
+    cursor:pointer;
 }
