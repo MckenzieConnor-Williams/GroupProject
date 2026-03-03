@@ -23,9 +23,10 @@
         </div>
 
         <div class ="nav-right">
-            <a href="login.html" class="login">Login</a>
-            <a href="signup.html" class="signup">Sign Up</a>
-            <a href="question_page" class="create">Create</a>
+            <a href="login.html" class="login" id="login-link">Login</a>
+            <a href="signup.html" class="signup" id="signup-link">Sign Up</a>
+            <a href="question_page" class="create" id="create-link">Create</a>
+            <a href="#" class="login" id="logout-link" style="display:none;">Log Out</a>
         </div>
     </nav>
     </header>
@@ -34,8 +35,9 @@
         <section class="hero">
             <h2>How do you want to study?</h2>
             <p>Practice whatever you're learning with SyntaxStudy's interactive flashcards, practice tests and study activities</p>
-            <button class="start-btn" onclick="window.location.href='question_page'">Start Studying</button>
+            <button class="start-btn" id="start-studying-btn">Start Studying</button>
         </section>
     </main>
+    <script src="index.js"></script>
 </body>
 </html>
