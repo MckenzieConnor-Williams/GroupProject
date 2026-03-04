@@ -19,6 +19,6 @@
     "express": "^5.2.1",
     "mongodb": "^7.1.0",
     "mongoose": "^9.2.3",
-    "path-to-regexp": "file:./path-to-regexp-8.3.0.tgz"
+    "path-to-regexp": "^8.3.0"
   }
 }
