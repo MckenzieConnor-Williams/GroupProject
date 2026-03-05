@@ -34,6 +34,10 @@ header {
 }
 
 
+
+
+
+/* style all links */
 .nav-left a, .nav-right a
 {
     display: inline-flex;
@@ -246,3 +250,5 @@ header {
         font-size: 16px;
     }
 }
+
+
