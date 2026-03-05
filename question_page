@@ -33,6 +33,28 @@
             padding: 42px 20px 56px;
         }
 
+        .page-nav {
+            margin-bottom: 18px;
+        }
+
+        .back-home-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            background: #f5f6fa;
+            color: #111827;
+            border: 1px solid #c7ccda;
+            border-radius: 12px;
+            padding: 10px 14px;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .back-home-btn:hover {
+            background: #eceff6;
+        }
+
         .hero {
             text-align: center;
             margin-bottom: 24px;
@@ -307,6 +329,10 @@
 </head>
 <body>
     <main class="page">
+        <div class="page-nav">
+            <a class="back-home-btn" href="/" aria-label="Go back to home page">Back to Home Page</a>
+        </div>
+
         <section class="hero">
             <h1>Quiz Master</h1>
             <p>Create your own questions and test your knowledge</p>

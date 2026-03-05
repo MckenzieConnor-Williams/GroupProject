@@ -18,6 +18,28 @@
             padding: 36px 16px;
         }
 
+        .page-nav {
+            margin-bottom: 14px;
+        }
+
+        .back-home-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            background: #f5f6fa;
+            color: #111827;
+            border: 1px solid #c7ccda;
+            border-radius: 10px;
+            padding: 8px 12px;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .back-home-btn:hover {
+            background: #eceff6;
+        }
+
         .card {
             background: #f3f3f3;
             border: 1px solid #d7d9df;
@@ -82,6 +104,10 @@
 </head>
 <body>
     <main class="page">
+        <div class="page-nav">
+            <a class="back-home-btn" href="index.html" aria-label="Go back to home page">Back Home</a>
+        </div>
+
         <div class="card">
             <div class="top">
                 <span id="progress">Question 0 of 0</span>
