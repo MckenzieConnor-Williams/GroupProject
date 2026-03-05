@@ -330,7 +330,7 @@
 <body>
     <main class="page">
         <div class="page-nav">
-            <a class="back-home-btn" href="index.html" aria-label="Go back to home page">Back Home</a>
+            <a class="back-home-btn" href="/" aria-label="Go back to home page">Back to Home Page</a>
         </div>
 
         <section class="hero">
