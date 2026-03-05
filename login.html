@@ -95,24 +95,26 @@
 
                 const btn = document.getElementById('load-users');
                 const container = document.getElementById('users-list');
-                btn.addEventListener('click', async () => {
-                    container.textContent = 'Loading...';
-                    try {
-                        const users = await getCombinedUsers();
-                        const ul = document.createElement('ul');
-                        users.forEach((u) => {
-                            const li = document.createElement('li');
-                            const label = u.name || 'No name';
-                            li.textContent = `${u.id || '-'}: ${label} (${u.email || 'no email'})`;
-                            ul.appendChild(li);
-                        });
-                        container.innerHTML = '';
-                        container.appendChild(ul);
-                    } catch (err) {
-                        container.textContent = 'Failed to load users';
-                        console.error(err);
-                    }
-                });
+                if (btn && container) {
+                    btn.addEventListener('click', async () => {
+                        container.textContent = 'Loading...';
+                        try {
+                            const users = await getCombinedUsers();
+                            const ul = document.createElement('ul');
+                            users.forEach((u) => {
+                                const li = document.createElement('li');
+                                const label = u.name || 'No name';
+                                li.textContent = `${u.id || '-'}: ${label} (${u.email || 'no email'})`;
+                                ul.appendChild(li);
+                            });
+                            container.innerHTML = '';
+                            container.appendChild(ul);
+                        } catch (err) {
+                            container.textContent = 'Failed to load users';
+                            console.error(err);
+                        }
+                    });
+                }
 
             
                 const form = document.getElementById('login-form');

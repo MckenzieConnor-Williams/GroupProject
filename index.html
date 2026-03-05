@@ -5,55 +5,36 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-       
+        <!-- Main CSS -->
         <link rel="stylesheet" href="Style.css">
-       
+        <!-- Page Specific CSS -->
         <link rel="stylesheet" href="homepage.css">
-        
-    </head> 
- 
+    </head>
+
     <body>
     <header>
-   
+        <!-- Header -->
         <h1 class ="title">SyntaxStudy</h1>
-        
+
     <nav class = "navbar">
         <div class = "nav-left">
-            <div class="dropdown">
-                <a href="#" class="nav-option" id="studytool">Study Tools</a>
-
-                <div class="dropdown-div" id="dropdown-div-studytools">
-                    <a href="#">Flashcards</a>
-                    <a href="#">Practice Questions</a>
-                    <a href="#">Information</a>
-                </div>
-            </div>
-
-            <div class="dropdown">
-                <a href="#" class="nav-option" id ="topics">Topics</a> 
-
-                <div class="dropdown-div" id="dropdown-div-topics">
-                    <a href="#">Flashcards</a>
-                    <a href="#">Practice Questions</a>
-                    <a href="#">Information</a>
-                </div>
-            </div>
-                
+            <a href="#" class="study-tools">Study Tools</a>
+            <a href="#" class="subject-area">Subject Area</a>
         </div>
 
         <div class ="nav-right">
-            <a href="login.html" class="login">Login</a> 
-            <a href="signup.html" class="signup">Sign Up</a> 
-            <a href="createQuestions.html" class="create">Create</a> 
+            <a href="login.html" class="login">Login</a>
+            <a href="signup.html" class="signup">Sign Up</a>
+            <a href="question_page" class="create">Create</a>
         </div>
-   
+    </nav>
     </header>
 
     <main>
         <section class="hero">
             <h2>How do you want to study?</h2>
-            <p>Practice whatever you're learning with SyntaxStudy's interative flashcards, practice tests and study activies</p>
-            <button id="signup-btn" class="start-btn">Start Studying</button>
+            <p>Practice whatever you're learning with SyntaxStudy's interactive flashcards, practice tests and study activities</p>
+            <button class="start-btn" onclick="window.location.href='question_page'">Start Studying</button>
         </section>
     </main>
 </body>
