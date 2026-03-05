@@ -2,12 +2,81 @@
 <html>
     <head>
         <title>HomePage</title>
-          <link rel="stylesheet" href="index.css">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        
+        <link rel="stylesheet" href="Style.css">
+        
+        <link rel="stylesheet" href="homepage.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     </head>
 
     <body>
+    <header>
+        
         <h1 class ="title">SyntaxStudy</h1>
-        <a href="#" class="HomeButton">Next Page</a>
-    </body>
 
+    <nav class = "navbar">
+        <div class = "nav-left">
+            <div class="nav-dropdown">
+                <button class="nav-dropdown-toggle" id="study-tools-toggle" type="button" aria-expanded="false">Study Tools</button>
+                <div class="nav-dropdown-menu" id="study-tools-menu">
+                    <a href="flashcards" id="view-flashcards-link">View Flashcards</a>
+                    <a href="flashcards">Create Flashcards</a>
+                    <a href="question_page" id="create-quiz-link">Create Quiz</a>
+                    <a href="question_answer" id="take-quiz-link">Take Quiz</a>
+                </div>
+            </div>
+            <a href="#" class="subject-area">Subject Area</a>
+        </div>
+
+        <div class ="nav-right">
+            <a href="login.html" class="login" id="login-link">Login</a>
+            <a href="signup.html" class="signup" id="signup-link">Sign Up</a>
+            <a href="question_page" class="create" id="create-link">Create</a>
+            <a href="#" class="login" id="logout-link" style="display:none;">Log Out</a>
+        </div>
+    </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h2>How do you want to study?</h2>
+            <p>Practice whatever you're learning with SyntaxStudy's interactive flashcards, practice tests and study activities</p>
+            <button class="start-btn" id="start-studying-btn">Start Studying</button>
+           </section>
+          <section class="study-options">
+
+                <div class="option-card">
+                    <div class="icon"><i class="fa-jelly-duo fa-regular fa-lightbulb"></i></div>
+                    <h3>Flashcards</h3>
+                    <p>Improve your active recall using interactive flashcards .</p>
+                </div>
+
+                <div class="option-card">
+                    <div class="icon"><i class="fa-solid fa-brain"></i></div>
+                    <h3>Learn</h3>
+                    <p>Learn more of Computer Science through given questions</p>
+                </div>
+
+                <div class="option-card">
+                    <div class="icon"><i class="fa-solid fa-pen"></i></div>
+                    <h3>Practice Test</h3>
+                    <p>Test your knowledge by creating custom quizzes .</p>
+                </div>
+
+                <div class="option-card">
+                    <div class="icon"><i class="fa-solid fa-book"></i></div>
+                    <h3>Study Guides</h3>
+                    <p> guides on how to  help you revise faster.</p>
+                </div>
+
+            </section>
+      
+    </main>
+    <script src="index.js"></script>
+</body>
 </html>
+
+<script src="homepage.js"></script>
