@@ -37,3 +37,9 @@ body {
 .bold-label {
     font-weight: 600;
 }
+
+.subtext{
+    margin: 4px 0 28px;
+    font-size: 14px;
+    color: var(--text-muted);
+}

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="Style.css" />
+    <link rel="stylesheet" href="createQuestions.css" />
+
+    <title>Create Questions</title>
+  </head>
+
+  <body>
+    <main class="page">
+        <section class="hero">
+            <h1>Quiz Master</h1>
+            <p>Create your own questions and test your knowledge</p>
+        </section>
+
+        <section class="tab-switch" aria-label="Mode selection">
+            <button type="button" class="tab-btn active">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M12 6.75v13.5m0-13.5C10.54 5.8 8.47 5.25 6.75 5.25C5.03 5.25 3.38 5.55 2.25 6.15V18c1.13-.6 2.78-.9 4.5-.9 1.72 0 3.79.55 5.25 1.5m0-11.85c1.46-.95 3.53-1.5 5.25-1.5 1.72 0 3.37.3 4.5.9V18c-1.13-.6-2.78-.9-4.5-.9-1.72 0-3.79.55-5.25 1.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Create Questions
+            </button>
+            <button type="button" class="tab-btn" id="take-quiz-btn">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M10 18h4m-6.5-6.5a2.5 2.5 0 1 1 5 0c0 .8-.3 1.2-.8 1.8-.4.4-.7.9-.7 1.7V16h2v-1c0-.3.1-.5.3-.7.7-.7 1.7-1.8 1.7-3.8a4.5 4.5 0 1 0-9 0c0 1.9 1 3.1 1.7 3.8.2.2.3.4.3.7v1h2v-1c0-.8-.3-1.3-.7-1.7-.5-.6-.8-1-.8-1.8Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Take Quiz
+            </button>
+        </section>
+
+        <section class="card">
+            <h2 class="create-title">Create New Question</h2>
+            <form id="question-form">
+                <div class="field-group">
+                    <label for="question-input">Question</label>
+                    <input id="question-input" type="text" placeholder="Enter your question..." required />
+                </div>
+                <div class="field-group">
+                    <label for="answer-input">Answer</label>
+                    <input id="answer-input" type="text" placeholder="Enter the correct answer..." required />
+                </div>
+                <button class="add-btn" type="submit">
+                    <span class="add-symbol">+</span>
+                    Add Question
+                </button>
+            </form>
+        </section>
+
+        <section class="questions-wrap">
+            <h2 id="questions-title">Your Questions (0)</h2>
+            <div class="card">
+                <div id="questions-empty" class="empty-state">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true" style="width:64px;height:64px;color:#767a8d;">
+                        <path d="M12 6.75v13.5m0-13.5C10.54 5.8 8.47 5.25 6.75 5.25C5.03 5.25 3.38 5.55 2.25 6.15V18c1.13-.6 2.78-.9 4.5-.9 1.72 0 3.79.55 5.25 1.5m0-11.85c1.46-.95 3.53-1.5 5.25-1.5 1.72 0 3.37.3 4.5.9V18c-1.13-.6-2.78-.9-4.5-.9-1.72 0-3.79.55-5.25 1.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <p>No questions yet. Create your first question above!</p>
+                </div>
+                <div id="questions-list" class="questions-list" hidden></div>
+            </div>
+        </section>
+    </main>
+  </body>
+</html>
+
+<script src="createQuestions.js"></script>
