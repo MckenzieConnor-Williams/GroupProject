@@ -8,6 +8,7 @@ const Flashcard = require('./models/Flashcard');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+let lastMongoError = '';
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -23,11 +24,21 @@ function ensureDatabaseAvailable(res) {
   }
 
   if (!isMongoReady()) {
-    res.status(503).json({ message: 'Database is unavailable. Start MongoDB and try again.' });
+    const reason = lastMongoError ? ` Last error: ${lastMongoError}` : '';
+    res.status(503).json({ message: `Database is unavailable. Start MongoDB and try again.${reason}` });
     return false;
   }
 
   return true;
+}
+
+function getMongoStateLabel() {
+  const state = mongoose.connection.readyState;
+  if (state === 0) return 'disconnected';
+  if (state === 1) return 'connected';
+  if (state === 2) return 'connecting';
+  if (state === 3) return 'disconnecting';
+  return 'unknown';
 }
 
 app.get('/', (req, res) => {
@@ -51,13 +62,23 @@ app.get('/flashcards', (req, res) => {
 
 app.use(express.static(path.join(__dirname)));
 
-if (process.env.MONGO_URI) {
-  mongoose.connect(process.env.MONGO_URI)
-    .then(() => console.log('MongoDB Connected'))
-    .catch((err) => console.log(err));
-} else {
-  console.warn('MONGO_URI is not set. Running without MongoDB connection.');
-}
+mongoose.connection.on('error', (err) => {
+  lastMongoError = err && err.message ? err.message : String(err);
+  console.error('MongoDB connection error:', lastMongoError);
+});
+
+mongoose.connection.on('disconnected', () => {
+  console.warn('MongoDB disconnected');
+});
+
+app.get('/api/health/db', (req, res) => {
+  res.status(200).json({
+    hasMongoUri: Boolean(process.env.MONGO_URI),
+    mongoState: getMongoStateLabel(),
+    mongoReadyState: mongoose.connection.readyState,
+    lastMongoError: lastMongoError || null
+  });
+});
 
 app.post('/api/signup', async (req, res) => {
   try {
@@ -254,6 +275,23 @@ app.delete('/api/flashcards/:id', async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+async function startServer() {
+  if (process.env.MONGO_URI) {
+    try {
+      await mongoose.connect(process.env.MONGO_URI);
+      console.log('MongoDB Connected');
+    } catch (err) {
+      lastMongoError = err && err.message ? err.message : String(err);
+      console.error('Failed to connect to MongoDB on startup:', lastMongoError);
+      process.exit(1);
+    }
+  } else {
+    console.warn('MONGO_URI is not set. Running without MongoDB connection.');
+  }
+
+  app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+  });
+}
+
+startServer();
