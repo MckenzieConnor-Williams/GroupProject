@@ -9,6 +9,7 @@
         <link rel="stylesheet" href="Style.css">
         
         <link rel="stylesheet" href="homepage.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWix+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkR4j8Y+f4iA6U5RAB2z4uYx04G6Q1LQX8hQ==" crossorigin="anonymous" referrerpolicy="no-referrer">
     </head>
 
     <body>
@@ -22,7 +23,7 @@
                 <button class="nav-dropdown-toggle" id="study-tools-toggle" type="button" aria-expanded="false">Study Tools</button>
                 <div class="nav-dropdown-menu" id="study-tools-menu">
                     <a href="flashcards" id="view-flashcards-link">View Flashcards</a>
-                    <a href="flashcards">Create Flashcards</a>
+                    <a href="flashcards" id="create-flashcards-link">Create Flashcards</a>
                     <a href="question_page" id="create-quiz-link">Create Quiz</a>
                     <a href="question_answer" id="take-quiz-link">Take Quiz</a>
                 </div>
@@ -45,9 +46,34 @@
             <p>Practice whatever you're learning with SyntaxStudy's interactive flashcards, practice tests and study activities</p>
             <button class="start-btn" id="start-studying-btn">Start Studying</button>
         </section>
+
+        <section class="study-options">
+            <div class="option-card" id="flashcards-card" data-route="flashcards" tabindex="0" role="button" aria-label="Open Flashcards">
+                <div class="icon"><i class="fa-regular fa-lightbulb"></i></div>
+                <h3>Flashcards</h3>
+                <p>Improve your active recall using interactive flashcards.</p>
+            </div>
+
+            <div class="option-card" id="learn-card" data-route="question_answer" tabindex="0" role="button" aria-label="Open Learn questions">
+                <div class="icon"><i class="fa-solid fa-brain"></i></div>
+                <h3>Learn</h3>
+                <p>Learn more of Computer Science through given questions.</p>
+            </div>
+
+            <div class="option-card" id="practice-test-card" data-route="question_page" tabindex="0" role="button" aria-label="Open Practice Test">
+                <div class="icon"><i class="fa-solid fa-pen"></i></div>
+                <h3>Practice Test</h3>
+                <p>Test your knowledge by creating custom quizzes.</p>
+            </div>
+
+            <div class="option-card" id="study-guides-card" data-route="question_answer" tabindex="0" role="button" aria-label="Open Study Guides">
+                <div class="icon"><i class="fa-solid fa-book"></i></div>
+                <h3>Study Guides</h3>
+                <p>Guides on how to help you revise faster.</p>
+            </div>
+        </section>
     </main>
     <script src="index.js"></script>
+    <script src="homepage.js"></script>
 </body>
 </html>
-
-<script src="homepage.js"></script>

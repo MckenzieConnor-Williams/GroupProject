@@ -1,31 +1,37 @@
-let studyTool = document.getElementById("studytool");
-let studyToolDiv = document.getElementById("dropdown-div-studytools");
+(function () {
+    const CURRENT_USER_KEY = "syntaxstudy_current_user";
+    const cards = document.querySelectorAll(".option-card[data-route]");
 
-let topics = document.getElementById("topics");
-let topicsDiv = document.getElementById("dropdown-div-topics");
-
-let signupBtn = document.getElementById("signup-btn");
-
-signupBtn.onclick = () => {
-    window.location.href = "signup.html";
-}
-
-studyTool.onclick = () => {
-    if(studyToolDiv.style.display == "block"){
-        studyToolDiv.style.display = "none";
+    function isLoggedIn() {
+        try {
+            const raw = localStorage.getItem(CURRENT_USER_KEY);
+            const user = JSON.parse(raw || "null");
+            return !!(user && typeof user.email === "string" && user.email.trim());
+        } catch (err) {
+            return false;
+        }
     }
-    else{
-        studyToolDiv.style.display = "block";
-        topicsDiv.style.display = "none";
-    }
-}
 
-topics.onclick = () => {
-    if(topicsDiv.style.display == "block"){
-        topicsDiv.style.display = "none";
+    function openCardRoute(card) {
+        const route = card.getAttribute("data-route");
+        if (!route) return;
+        if (!isLoggedIn()) {
+            window.location.href = "signup.html";
+            return;
+        }
+        window.location.href = route;
     }
-    else{
-        topicsDiv.style.display = "block";
-        studyToolDiv.style.display = "none";
-    }
-}
+
+    cards.forEach((card) => {
+        card.addEventListener("click", function () {
+            openCardRoute(card);
+        });
+
+        card.addEventListener("keydown", function (event) {
+            if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                openCardRoute(card);
+            }
+        });
+    });
+})();
