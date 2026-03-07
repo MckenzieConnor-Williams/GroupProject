@@ -1,31 +1,22 @@
-let studyTool = document.getElementById("studytool");
-let studyToolDiv = document.getElementById("dropdown-div-studytools");
+(function () {
+    const cards = document.querySelectorAll(".option-card[data-route]");
 
-let topics = document.getElementById("topics");
-let topicsDiv = document.getElementById("dropdown-div-topics");
-
-let signupBtn = document.getElementById("signup-btn");
-
-signupBtn.onclick = () => {
-    window.location.href = "signup.html";
-}
-
-studyTool.onclick = () => {
-    if(studyToolDiv.style.display == "block"){
-        studyToolDiv.style.display = "none";
+    function openRoute(card) {
+        const route = card.getAttribute("data-route");
+        if (!route) return;
+        window.location.href = route;
     }
-    else{
-        studyToolDiv.style.display = "block";
-        topicsDiv.style.display = "none";
-    }
-}
 
-topics.onclick = () => {
-    if(topicsDiv.style.display == "block"){
-        topicsDiv.style.display = "none";
-    }
-    else{
-        topicsDiv.style.display = "block";
-        studyToolDiv.style.display = "none";
-    }
-}
+    cards.forEach((card) => {
+        card.addEventListener("click", function () {
+            openRoute(card);
+        });
+
+        card.addEventListener("keydown", function (event) {
+            if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                openRoute(card);
+            }
+        });
+    });
+})();
