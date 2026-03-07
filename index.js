@@ -26,6 +26,8 @@
     }
 
     function updateNav() {
+        if (!loginLink || !signupLink || !logoutLink || !createLink) return;
+
         if (isLoggedIn()) {
             loginLink.style.display = "none";
             signupLink.style.display = "none";
@@ -40,33 +42,41 @@
         createLink.setAttribute("href", "signup.html");
     }
 
-    createLink.addEventListener("click", function (event) {
-        if (!isLoggedIn()) {
+    if (createLink) {
+        createLink.addEventListener("click", function (event) {
+            if (!isLoggedIn()) {
+                event.preventDefault();
+                window.location.href = "signup.html";
+            }
+        });
+    }
+
+    if (logoutLink) {
+        logoutLink.addEventListener("click", function (event) {
             event.preventDefault();
+            localStorage.removeItem(CURRENT_USER_KEY);
+            updateNav();
+            window.location.href = "index.html";
+        });
+    }
+
+    if (startStudyingBtn) {
+        startStudyingBtn.addEventListener("click", function () {
+            if (isLoggedIn()) {
+                window.location.href = "question_page";
+                return;
+            }
             window.location.href = "signup.html";
-        }
-    });
+        });
+    }
 
-    logoutLink.addEventListener("click", function (event) {
-        event.preventDefault();
-        localStorage.removeItem(CURRENT_USER_KEY);
-        updateNav();
-        window.location.href = "index.html";
-    });
-
-    startStudyingBtn.addEventListener("click", function () {
-        if (isLoggedIn()) {
-            window.location.href = "question_page";
-            return;
-        }
-        window.location.href = "signup.html";
-    });
-
-    toolsToggle.addEventListener("click", function () {
-        const expanded = toolsToggle.getAttribute("aria-expanded") === "true";
-        toolsToggle.setAttribute("aria-expanded", expanded ? "false" : "true");
-        toolsMenu.classList.toggle("open", !expanded);
-    });
+    if (toolsToggle && toolsMenu) {
+        toolsToggle.addEventListener("click", function () {
+            const expanded = toolsToggle.getAttribute("aria-expanded") === "true";
+            toolsToggle.setAttribute("aria-expanded", expanded ? "false" : "true");
+            toolsMenu.classList.toggle("open", !expanded);
+        });
+    }
 
     function requireLoginForTool(event) {
         if (isLoggedIn()) return;
@@ -74,11 +84,18 @@
         window.location.href = "signup.html";
     }
 
-    viewFlashcardsLink.addEventListener("click", requireLoginForTool);
-    createFlashcardsLink.addEventListener("click", requireLoginForTool);
-    createQuizLink.addEventListener("click", requireLoginForTool);
+    if (viewFlashcardsLink) {
+        viewFlashcardsLink.addEventListener("click", requireLoginForTool);
+    }
+    if (createFlashcardsLink) {
+        createFlashcardsLink.addEventListener("click", requireLoginForTool);
+    }
+    if (createQuizLink) {
+        createQuizLink.addEventListener("click", requireLoginForTool);
+    }
 
     document.addEventListener("click", function (event) {
+        if (!toolsMenu || !toolsToggle) return;
         if (!toolsMenu.classList.contains("open")) return;
         const target = event.target;
         if (!(target instanceof Node)) return;
