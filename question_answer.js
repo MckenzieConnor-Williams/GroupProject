@@ -5,7 +5,7 @@
     const progressEl = document.getElementById("progress");
     const scoreEl = document.getElementById("score");
     const questionEl = document.getElementById("question-text");
-    const answerInput = document.getElementById("answer-input");
+    const optionsEl = document.getElementById("options");
     const messageEl = document.getElementById("message");
     const submitBtn = document.getElementById("submit-btn");
     const nextBtn = document.getElementById("next-btn");
@@ -15,14 +15,6 @@
     let currentIndex = 0;
     let score = 0;
     let submitted = false;
-
-    function normalizeAnswer(value) {
-        return String(value || "")
-            .toLowerCase()
-            .trim()
-            .replace(/[^\w\s]|_/g, "")
-            .replace(/\s+/g, " ");
-    }
 
     function shuffle(array) {
         const arr = array.slice();
@@ -81,12 +73,76 @@
         return Array.isArray(data.flashcards) ? data.flashcards : [];
     }
 
+    function isValidMultipleChoice(item) {
+        return (
+            item &&
+            Array.isArray(item.options) &&
+            item.options.length === 4 &&
+            Number.isInteger(item.correctIndex) &&
+            item.correctIndex >= 0 &&
+            item.correctIndex < 4
+        );
+    }
+
+    function clearOptions() {
+        optionsEl.innerHTML = "";
+    }
+
+    function renderOptions(item) {
+        clearOptions();
+        const labels = ["A", "B", "C", "D"];
+        item.options.forEach(function (option, index) {
+            const label = document.createElement("label");
+            label.className = "option-item";
+
+            const input = document.createElement("input");
+            input.type = "radio";
+            input.name = "answer-option";
+            input.value = String(index);
+
+            const badge = document.createElement("span");
+            badge.className = "option-label";
+            badge.textContent = labels[index] + ".";
+
+            const text = document.createElement("span");
+            text.className = "option-text";
+            text.textContent = option;
+
+            input.addEventListener("change", function () {
+                const allOptions = optionsEl.querySelectorAll(".option-item");
+                allOptions.forEach(function (node) {
+                    node.classList.remove("selected");
+                });
+                label.classList.add("selected");
+            });
+
+            label.appendChild(input);
+            label.appendChild(badge);
+            label.appendChild(text);
+            optionsEl.appendChild(label);
+        });
+    }
+
+    function getSelectedIndex() {
+        const selected = optionsEl.querySelector("input[name='answer-option']:checked");
+        if (!selected) return null;
+        const parsed = Number(selected.value);
+        return Number.isInteger(parsed) ? parsed : null;
+    }
+
+    function setOptionsDisabled(disabled) {
+        const inputs = optionsEl.querySelectorAll("input[name='answer-option']");
+        inputs.forEach(function (input) {
+            input.disabled = disabled;
+        });
+    }
+
     function render() {
         if (questions.length === 0) {
             progressEl.textContent = "Question 0 of 0";
             scoreEl.textContent = "Score: 0";
-            questionEl.textContent = "No questions in your bank yet. Add some first.";
-            answerInput.disabled = true;
+            questionEl.textContent = "No multiple-choice questions yet. Add some first.";
+            clearOptions();
             submitBtn.disabled = true;
             nextBtn.disabled = true;
             return;
@@ -94,11 +150,12 @@
 
         if (currentIndex >= questions.length) {
             progressEl.textContent = "Completed";
-            scoreEl.textContent = "Final Score: " + score + " / " + questions.length;
+            const percent = Math.round((score / questions.length) * 100);
+            scoreEl.textContent =
+                "Final Score: " + score + " / " + questions.length + " (" + percent + "%)";
             questionEl.textContent = "Quiz finished.";
-            messageEl.textContent = "Great work. Go add more questions or retake for new random order.";
-            answerInput.value = "";
-            answerInput.disabled = true;
+            messageEl.textContent = "Your accuracy was " + percent + "%. Go add more questions or retake for new random order.";
+            clearOptions();
             submitBtn.disabled = true;
             nextBtn.disabled = true;
             return;
@@ -108,34 +165,32 @@
         progressEl.textContent = "Question " + (currentIndex + 1) + " of " + questions.length;
         scoreEl.textContent = "Score: " + score;
         questionEl.textContent = item.question;
-        answerInput.value = "";
-        answerInput.disabled = false;
+        renderOptions(item);
         submitBtn.disabled = false;
         nextBtn.disabled = true;
         messageEl.textContent = "";
         submitted = false;
-        answerInput.focus();
     }
 
     submitBtn.addEventListener("click", function () {
         if (submitted || currentIndex >= questions.length) return;
-        const userAnswer = normalizeAnswer(answerInput.value);
-        const correctAnswer = normalizeAnswer(questions[currentIndex].answer);
-        if (!userAnswer) {
-            messageEl.textContent = "Please enter an answer before submitting.";
+        const selectedIndex = getSelectedIndex();
+        if (selectedIndex === null) {
+            messageEl.textContent = "Please choose an answer before submitting.";
             return;
         }
         submitted = true;
 
-        if (userAnswer === correctAnswer) {
+        if (selectedIndex === questions[currentIndex].correctIndex) {
             score += 1;
             messageEl.textContent = "Correct!";
         } else {
-            messageEl.textContent = 'Incorrect. Correct answer: "' + questions[currentIndex].answer + '"';
+            const correctAnswer = questions[currentIndex].options[questions[currentIndex].correctIndex];
+            messageEl.textContent = 'Incorrect. Correct answer: "' + correctAnswer + '"';
         }
 
         scoreEl.textContent = "Score: " + score;
-        answerInput.disabled = true;
+        setOptionsDisabled(true);
         submitBtn.disabled = true;
         nextBtn.disabled = false;
         nextBtn.focus();
@@ -151,18 +206,6 @@
         window.location.href = "question_page";
     });
 
-    answerInput.addEventListener("keydown", function (event) {
-        if (event.key !== "Enter") return;
-        event.preventDefault();
-        if (!submitted) {
-            submitBtn.click();
-            return;
-        }
-        if (!nextBtn.disabled) {
-            nextBtn.click();
-        }
-    });
-
     (async function init() {
         const email = getCurrentUserEmail();
         if (!email) {
@@ -170,10 +213,10 @@
             return;
         }
 
-        questions = getSessionQuestionsForUser();
+        questions = getSessionQuestionsForUser().filter(isValidMultipleChoice);
         if (questions.length === 0) {
             try {
-                questions = shuffle(await loadFlashcards());
+                questions = shuffle((await loadFlashcards()).filter(isValidMultipleChoice));
             } catch (err) {
                 console.error(err);
                 messageEl.textContent = "Unable to load your questions from database.";

@@ -17,6 +17,14 @@ const flashcardSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
+  options: {
+    type: [String],
+    default: undefined
+  },
+  correctIndex: {
+    type: Number,
+    default: undefined
+  },
   createdAt: {
     type: Date,
     default: Date.now

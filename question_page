@@ -176,10 +176,76 @@
             background: #0b0d28;
         }
 
+        .secondary-btn {
+            width: 100%;
+            border: 1px solid #c4c9d5;
+            border-radius: 14px;
+            background: #f6f7fa;
+            color: #111827;
+            font-size: 20px;
+            font-weight: 700;
+            padding: 14px 16px;
+            margin-top: 12px;
+            cursor: pointer;
+        }
+
+        .secondary-btn:hover {
+            background: #ebedf3;
+        }
+
         .add-symbol {
             font-size: 44px;
             line-height: 1;
             font-weight: 400;
+        }
+
+        .options-grid {
+            display: grid;
+            gap: 16px;
+            margin: 8px 0 24px;
+        }
+
+        .option-row {
+            display: grid;
+            gap: 10px;
+        }
+
+        .option-row label {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1b1d25;
+        }
+
+        .option-input-row {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .option-input-row input[type="text"] {
+            flex: 1;
+            border-radius: 14px;
+            font-size: 28px;
+            padding: 14px 18px;
+        }
+
+        .correct-choice {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 18px;
+            font-weight: 700;
+            color: #1f2937;
+            background: #edf0f6;
+            border-radius: 999px;
+            padding: 6px 12px;
+            border: 1px solid #cfd5e1;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .correct-choice input {
+            accent-color: #0f172a;
         }
 
         .questions-wrap {
@@ -232,6 +298,40 @@
             font-size: 18px;
         }
 
+        .option-list {
+            margin: 10px 0 0;
+            padding: 0;
+            list-style: none;
+            display: grid;
+            gap: 6px;
+            color: #3f4758;
+            font-size: 16px;
+        }
+
+        .option-list li {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .option-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 26px;
+            height: 26px;
+            border-radius: 8px;
+            background: #dfe3ee;
+            font-weight: 700;
+            color: #1f2937;
+            font-size: 14px;
+        }
+
+        .option-correct {
+            font-weight: 700;
+            color: #0f172a;
+        }
+
         .question-item-actions {
             display: flex;
             gap: 10px;
@@ -277,6 +377,22 @@
                 font-size: 24px;
             }
 
+            .secondary-btn {
+                font-size: 16px;
+            }
+
+            .option-row label {
+                font-size: 20px;
+            }
+
+            .option-input-row input[type="text"] {
+                font-size: 22px;
+            }
+
+            .correct-choice {
+                font-size: 16px;
+            }
+
             .questions-wrap h2 {
                 font-size: 36px;
             }
@@ -311,6 +427,22 @@
 
             .add-btn {
                 font-size: 20px;
+            }
+
+            .secondary-btn {
+                font-size: 14px;
+            }
+
+            .option-row label {
+                font-size: 16px;
+            }
+
+            .correct-choice {
+                font-size: 14px;
+            }
+
+            .option-input-row input[type="text"] {
+                font-size: 18px;
             }
 
             .questions-wrap h2 {
@@ -360,14 +492,53 @@
                     <label for="question-input">Question</label>
                     <input id="question-input" type="text" placeholder="Enter your question..." required />
                 </div>
-                <div class="field-group">
-                    <label for="answer-input">Answer</label>
-                    <input id="answer-input" type="text" placeholder="Enter the correct answer..." required />
+                <div class="options-grid" aria-label="Answer options">
+                    <div class="option-row">
+                        <label for="option-1">Option A</label>
+                        <div class="option-input-row">
+                            <input id="option-1" type="text" placeholder="Enter answer choice A..." data-option-index="0" required />
+                            <label class="correct-choice">
+                                <input type="radio" name="correct-option" value="0" />
+                                Correct
+                            </label>
+                        </div>
+                    </div>
+                    <div class="option-row">
+                        <label for="option-2">Option B</label>
+                        <div class="option-input-row">
+                            <input id="option-2" type="text" placeholder="Enter answer choice B..." data-option-index="1" required />
+                            <label class="correct-choice">
+                                <input type="radio" name="correct-option" value="1" />
+                                Correct
+                            </label>
+                        </div>
+                    </div>
+                    <div class="option-row">
+                        <label for="option-3">Option C</label>
+                        <div class="option-input-row">
+                            <input id="option-3" type="text" placeholder="Enter answer choice C..." data-option-index="2" required />
+                            <label class="correct-choice">
+                                <input type="radio" name="correct-option" value="2" />
+                                Correct
+                            </label>
+                        </div>
+                    </div>
+                    <div class="option-row">
+                        <label for="option-4">Option D</label>
+                        <div class="option-input-row">
+                            <input id="option-4" type="text" placeholder="Enter answer choice D..." data-option-index="3" required />
+                            <label class="correct-choice">
+                                <input type="radio" name="correct-option" value="3" />
+                                Correct
+                            </label>
+                        </div>
+                    </div>
                 </div>
                 <button class="add-btn" type="submit">
                     <span class="add-symbol">+</span>
                     Add Question
                 </button>
+                <button class="secondary-btn" type="button" id="seed-btn">Add Sample CS Questions</button>
             </form>
         </section>
 

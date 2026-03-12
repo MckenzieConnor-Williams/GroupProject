@@ -16,6 +16,21 @@ function isMongoReady() {
   return mongoose.connection.readyState === 1;
 }
 
+function normalizeOptions(rawOptions) {
+  if (!Array.isArray(rawOptions)) return null;
+  const trimmed = rawOptions.map((opt) => String(opt || '').trim());
+  if (trimmed.length !== 4) return null;
+  if (trimmed.some((opt) => !opt)) return null;
+  return trimmed;
+}
+
+function normalizeCorrectIndex(rawIndex) {
+  const parsed = Number(rawIndex);
+  if (!Number.isInteger(parsed)) return null;
+  if (parsed < 0 || parsed > 3) return null;
+  return parsed;
+}
+
 function ensureDatabaseAvailable(res) {
   if (!process.env.MONGO_URI) {
     res.status(503).json({ message: 'Database is not configured. Set MONGO_URI in .env.' });
@@ -140,6 +155,8 @@ app.get('/api/flashcards', async (req, res) => {
         id: String(item._id),
         question: item.question,
         answer: item.answer,
+        options: item.options,
+        correctIndex: typeof item.correctIndex === 'number' ? item.correctIndex : undefined,
         createdAt: item.createdAt
       }))
     });
@@ -155,23 +172,44 @@ app.post('/api/flashcards', async (req, res) => {
 
     const userEmail = String(req.body.userEmail || '').trim().toLowerCase();
     const question = String(req.body.question || '').trim();
-    const answer = String(req.body.answer || '').trim();
+    let answer = String(req.body.answer || '').trim();
+    const normalizedOptions = normalizeOptions(req.body.options);
+    const normalizedCorrectIndex = normalizeCorrectIndex(req.body.correctIndex);
 
     if (!userEmail) {
       return res.status(400).json({ message: 'User email is required' });
     }
 
-    if (!question || !answer) {
-      return res.status(400).json({ message: 'Question and answer are required' });
+    if (!question) {
+      return res.status(400).json({ message: 'Question is required' });
     }
 
-    const flashcard = await Flashcard.create({ userEmail, question, answer });
+    if (normalizedOptions || normalizedCorrectIndex !== null) {
+      if (!normalizedOptions || normalizedCorrectIndex === null) {
+        return res.status(400).json({ message: 'Provide 4 options and a valid correct index (0-3)' });
+      }
+      answer = normalizedOptions[normalizedCorrectIndex];
+    }
+
+    if (!answer) {
+      return res.status(400).json({ message: 'Answer is required' });
+    }
+
+    const flashcard = await Flashcard.create({
+      userEmail,
+      question,
+      answer,
+      options: normalizedOptions || undefined,
+      correctIndex: normalizedCorrectIndex !== null ? normalizedCorrectIndex : undefined
+    });
     return res.status(201).json({
       message: 'Flashcard created',
       flashcard: {
         id: String(flashcard._id),
         question: flashcard.question,
         answer: flashcard.answer,
+        options: flashcard.options,
+        correctIndex: typeof flashcard.correctIndex === 'number' ? flashcard.correctIndex : undefined,
         createdAt: flashcard.createdAt
       }
     });
@@ -188,7 +226,9 @@ app.put('/api/flashcards/:id', async (req, res) => {
     const id = String(req.params.id || '').trim();
     const userEmail = String(req.body.userEmail || '').trim().toLowerCase();
     const question = String(req.body.question || '').trim();
-    const answer = String(req.body.answer || '').trim();
+    let answer = String(req.body.answer || '').trim();
+    const normalizedOptions = normalizeOptions(req.body.options);
+    const normalizedCorrectIndex = normalizeCorrectIndex(req.body.correctIndex);
 
     if (!id) {
       return res.status(400).json({ message: 'Flashcard id is required' });
@@ -198,13 +238,29 @@ app.put('/api/flashcards/:id', async (req, res) => {
       return res.status(400).json({ message: 'User email is required' });
     }
 
-    if (!question || !answer) {
-      return res.status(400).json({ message: 'Question and answer are required' });
+    if (!question) {
+      return res.status(400).json({ message: 'Question is required' });
+    }
+
+    if (normalizedOptions || normalizedCorrectIndex !== null) {
+      if (!normalizedOptions || normalizedCorrectIndex === null) {
+        return res.status(400).json({ message: 'Provide 4 options and a valid correct index (0-3)' });
+      }
+      answer = normalizedOptions[normalizedCorrectIndex];
+    }
+
+    if (!answer) {
+      return res.status(400).json({ message: 'Answer is required' });
     }
 
     const flashcard = await Flashcard.findOneAndUpdate(
       { _id: id, userEmail },
-      { question, answer },
+      {
+        question,
+        answer,
+        options: normalizedOptions || undefined,
+        correctIndex: normalizedCorrectIndex !== null ? normalizedCorrectIndex : undefined
+      },
       { returnDocument: 'after' }
     );
 
@@ -218,6 +274,8 @@ app.put('/api/flashcards/:id', async (req, res) => {
         id: String(flashcard._id),
         question: flashcard.question,
         answer: flashcard.answer,
+        options: flashcard.options,
+        correctIndex: typeof flashcard.correctIndex === 'number' ? flashcard.correctIndex : undefined,
         createdAt: flashcard.createdAt
       }
     });
@@ -251,6 +309,48 @@ app.delete('/api/flashcards/:id', async (req, res) => {
   } catch (err) {
     console.error(err);
     return res.status(500).json({ message: 'Server error while deleting flashcard' });
+  }
+});
+
+app.post('/api/flashcards/seed', async (req, res) => {
+  try {
+    if (!ensureDatabaseAvailable(res)) return;
+
+    const userEmail = String(req.body.userEmail || '').trim().toLowerCase();
+    if (!userEmail) {
+      return res.status(400).json({ message: 'User email is required' });
+    }
+
+    const items = Array.isArray(req.body.questions) ? req.body.questions : [];
+    if (items.length === 0) {
+      return res.status(400).json({ message: 'Questions array is required' });
+    }
+
+    const prepared = [];
+    for (const item of items) {
+      const question = String(item.question || '').trim();
+      const normalizedOptions = normalizeOptions(item.options);
+      const normalizedCorrectIndex = normalizeCorrectIndex(item.correctIndex);
+      if (!question || !normalizedOptions || normalizedCorrectIndex === null) {
+        return res.status(400).json({ message: 'Each question needs text, 4 options, and a valid correct index' });
+      }
+      prepared.push({
+        userEmail,
+        question,
+        options: normalizedOptions,
+        correctIndex: normalizedCorrectIndex,
+        answer: normalizedOptions[normalizedCorrectIndex]
+      });
+    }
+
+    const inserted = await Flashcard.insertMany(prepared);
+    return res.status(201).json({
+      message: 'Seeded questions',
+      count: inserted.length
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: 'Server error while seeding flashcards' });
   }
 });
 
