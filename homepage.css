@@ -198,6 +198,60 @@ header {
     outline-offset: 3px;
 }
 
+.study-options
+{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 18px;
+    padding: 0 24px 64px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.option-card
+{
+    background: #ffffff;
+    border: 1px solid #d5dbea;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 10px 18px rgba(3, 2, 19, 0.08);
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.option-card:hover
+{
+    transform: translateY(-4px);
+    box-shadow: 0 16px 26px rgba(3, 2, 19, 0.14);
+    border-color: #b8c0d9;
+}
+
+.option-card:focus-visible
+{
+    outline: 3px solid rgba(3, 2, 19, 0.35);
+    outline-offset: 3px;
+}
+
+.option-card .icon
+{
+    font-size: 24px;
+    color: #0f172a;
+    margin-bottom: 12px;
+}
+
+.option-card h3
+{
+    margin: 0 0 8px;
+    font-size: 20px;
+}
+
+.option-card p
+{
+    margin: 0;
+    color: #4b5563;
+    line-height: 1.5;
+}
+
 @media (max-width: 700px)
 {
     header
@@ -249,6 +303,10 @@ header {
     {
         font-size: 16px;
     }
-}
 
+    .study-options
+    {
+        padding: 0 16px 48px;
+    }
+}
 
