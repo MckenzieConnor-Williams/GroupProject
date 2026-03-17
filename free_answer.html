@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Take Quiz</title>
-    
-    <link rel="stylesheet" href="question_answer.css">
+    <title>Free Answer Quiz</title>
+    <link rel="stylesheet" href="free_answer.css">
 </head>
 <body>
     <main class="page">
@@ -19,7 +18,10 @@
                 <span id="score">Score: 0</span>
             </div>
             <h1 class="question" id="question-text">Loading...</h1>
-            <div class="options" id="options"></div>
+            <div class="answer-area">
+                <label class="answer-label" for="answer-input">Your Answer</label>
+                <input id="answer-input" type="text" placeholder="Type your answer..." autocomplete="off" />
+            </div>
             <div class="actions">
                 <button class="primary" id="submit-btn" type="button">Submit</button>
                 <button class="secondary" id="next-btn" type="button" disabled>Next</button>
@@ -29,6 +31,6 @@
         </div>
     </main>
 
-    <script src="question_answer.js"></script>
+    <script src="free_answer.js"></script>
 </body>
 </html>

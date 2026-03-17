@@ -1,0 +1,452 @@
+:root {
+            --page-bg: #c9cfdd;
+            --card-bg: #f3f3f3;
+            --text-primary: #111827;
+            --text-muted: #6b7280;
+            --accent-dark: #02021a;
+            --input-bg: #e8e8eb;
+            --border: #d7d9df;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--page-bg);
+            color: var(--text-primary);
+        }
+
+        .page {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 42px 20px 56px;
+        }
+
+        .page-nav {
+            margin-bottom: 18px;
+        }
+
+        .back-home-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            background: #f5f6fa;
+            color: #111827;
+            border: 1px solid #c7ccda;
+            border-radius: 12px;
+            padding: 10px 14px;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .back-home-btn:hover {
+            background: #eceff6;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .hero h1 {
+            margin: 0;
+            font-size: clamp(36px, 5vw, 62px);
+            line-height: 1.05;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .hero p {
+            margin: 12px 0 0;
+            font-size: clamp(18px, 2.2vw, 24px);
+            color: #46505f;
+        }
+
+        .tab-switch {
+            margin: 26px auto 30px;
+            width: 100%;
+            background: #d7d7dc;
+            border-radius: 20px;
+            padding: 4px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .tab-btn {
+            border: 0;
+            border-radius: 16px;
+            background: transparent;
+            color: #191c24;
+            font-size: 20px;
+            font-weight: 700;
+            padding: 14px 16px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .tab-btn.active {
+            background: #efefef;
+        }
+
+        .icon {
+            width: 22px;
+            height: 22px;
+            color: currentColor;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            padding: 28px;
+        }
+
+        .create-title {
+            margin: 0 0 24px;
+            font-size: 40px;
+            font-weight: 800;
+            color: #171923;
+        }
+
+        .field-group {
+            margin-bottom: 18px;
+        }
+
+        .field-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 34px;
+            font-weight: 700;
+            color: #1b1d25;
+        }
+
+        .field-group input {
+            width: 100%;
+            border: 0;
+            border-radius: 14px;
+            background: var(--input-bg);
+            font-size: 34px;
+            color: var(--text-primary);
+            padding: 16px 22px;
+            outline: 2px solid transparent;
+            transition: outline-color 0.18s ease;
+        }
+
+        .field-group input::placeholder {
+            color: #6f7686;
+        }
+
+        .field-group input:focus {
+            outline-color: #7f8fb0;
+        }
+
+        .add-btn {
+            width: 100%;
+            border: 0;
+            border-radius: 14px;
+            background: var(--accent-dark);
+            color: #fff;
+            font-size: 36px;
+            font-weight: 700;
+            padding: 16px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+        }
+
+        .add-btn:hover {
+            background: #0b0d28;
+        }
+
+        .secondary-btn {
+            width: 100%;
+            border: 1px solid #c4c9d5;
+            border-radius: 14px;
+            background: #f6f7fa;
+            color: #111827;
+            font-size: 20px;
+            font-weight: 700;
+            padding: 14px 16px;
+            margin-top: 12px;
+            cursor: pointer;
+        }
+
+        .secondary-btn:hover {
+            background: #ebedf3;
+        }
+
+        .add-symbol {
+            font-size: 44px;
+            line-height: 1;
+            font-weight: 400;
+        }
+
+        .options-grid {
+            display: grid;
+            gap: 16px;
+            margin: 8px 0 24px;
+        }
+
+        .option-row {
+            display: grid;
+            gap: 10px;
+        }
+
+        .option-row label {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1b1d25;
+        }
+
+        .option-input-row {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .option-input-row input[type="text"] {
+            flex: 1;
+            border-radius: 14px;
+            font-size: 28px;
+            padding: 14px 18px;
+        }
+
+        .correct-choice {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 18px;
+            font-weight: 700;
+            color: #1f2937;
+            background: #edf0f6;
+            border-radius: 999px;
+            padding: 6px 12px;
+            border: 1px solid #cfd5e1;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .correct-choice input {
+            accent-color: #0f172a;
+        }
+
+        .questions-wrap {
+            margin-top: 44px;
+        }
+
+        .questions-wrap h2 {
+            margin: 0 0 18px;
+            font-size: 52px;
+            font-weight: 800;
+            color: #1a2133;
+        }
+
+        .empty-state {
+            text-align: center;
+            min-height: 270px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .empty-state p {
+            margin: 0;
+            font-size: 42px;
+            color: #697083;
+        }
+
+        .questions-list {
+            display: grid;
+            gap: 14px;
+        }
+
+        .question-item {
+            background: #ececef;
+            border: 1px solid #d7d9df;
+            border-radius: 14px;
+            padding: 16px 18px;
+        }
+
+        .question-item h3 {
+            margin: 0 0 6px;
+            font-size: 22px;
+        }
+
+        .question-item p {
+            margin: 0;
+            color: #4f5667;
+            font-size: 18px;
+        }
+
+        .option-list {
+            margin: 10px 0 0;
+            padding: 0;
+            list-style: none;
+            display: grid;
+            gap: 6px;
+            color: #3f4758;
+            font-size: 16px;
+        }
+
+        .option-list li {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .option-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 26px;
+            height: 26px;
+            border-radius: 8px;
+            background: #dfe3ee;
+            font-weight: 700;
+            color: #1f2937;
+            font-size: 14px;
+        }
+
+        .option-correct {
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .question-item-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .question-action-btn {
+            border: 1px solid #c4c9d5;
+            border-radius: 10px;
+            background: #f6f7fa;
+            color: #111827;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+
+        .question-action-btn:hover {
+            background: #ebedf3;
+        }
+
+        .question-action-btn.delete-btn {
+            border-color: #ef9a9a;
+            color: #8b1f1f;
+            background: #fff1f1;
+        }
+
+        .question-action-btn.delete-btn:hover {
+            background: #ffe5e5;
+        }
+
+        @media (max-width: 1024px) {
+            .create-title {
+                font-size: 32px;
+            }
+
+            .field-group label,
+            .field-group input {
+                font-size: 24px;
+            }
+
+            .add-btn {
+                font-size: 24px;
+            }
+
+            .secondary-btn {
+                font-size: 16px;
+            }
+
+            .option-row label {
+                font-size: 20px;
+            }
+
+            .option-input-row input[type="text"] {
+                font-size: 22px;
+            }
+
+            .correct-choice {
+                font-size: 16px;
+            }
+
+            .questions-wrap h2 {
+                font-size: 36px;
+            }
+
+            .empty-state p {
+                font-size: 28px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .page {
+                padding: 30px 14px 40px;
+            }
+
+            .hero p {
+                font-size: 16px;
+            }
+
+            .tab-btn {
+                font-size: 16px;
+                padding: 12px 8px;
+            }
+
+            .card {
+                padding: 18px;
+            }
+
+            .field-group label,
+            .field-group input {
+                font-size: 18px;
+            }
+
+            .add-btn {
+                font-size: 20px;
+            }
+
+            .secondary-btn {
+                font-size: 14px;
+            }
+
+            .option-row label {
+                font-size: 16px;
+            }
+
+            .correct-choice {
+                font-size: 14px;
+            }
+
+            .option-input-row input[type="text"] {
+                font-size: 18px;
+            }
+
+            .questions-wrap h2 {
+                font-size: 30px;
+            }
+
+            .empty-state {
+                min-height: 210px;
+            }
+
+            .empty-state p {
+                font-size: 22px;
+            }
+        }

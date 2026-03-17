@@ -64,6 +64,11 @@ app.get('/question_answer', (req, res) => {
   res.sendFile(path.join(__dirname, 'question_answer.html'));
 });
 
+app.get('/free_answer', (req, res) => {
+  res.type('html');
+  res.sendFile(path.join(__dirname, 'free_answer.html'));
+});
+
 app.get('/flashcards', (req, res) => {
   res.type('html');
   res.sendFile(path.join(__dirname, 'flashcards.html'));

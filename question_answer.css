@@ -1,0 +1,123 @@
+body {
+            margin: 0;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background: #c9cfdd;
+            color: #111827;
+        }
+
+        .page {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 36px 16px;
+        }
+
+        .page-nav {
+            margin-bottom: 14px;
+        }
+
+        .back-home-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            background: #f5f6fa;
+            color: #111827;
+            border: 1px solid #c7ccda;
+            border-radius: 10px;
+            padding: 8px 12px;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .back-home-btn:hover {
+            background: #eceff6;
+        }
+
+        .card {
+            background: #f3f3f3;
+            border: 1px solid #d7d9df;
+            border-radius: 16px;
+            padding: 22px;
+        }
+
+        .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 14px;
+            color: #4b5563;
+            font-size: 14px;
+        }
+
+        .question {
+            font-size: 24px;
+            font-weight: 700;
+            margin: 10px 0 16px;
+        }
+
+        .options {
+            display: grid;
+            gap: 12px;
+            margin: 10px 0 4px;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            border-radius: 12px;
+            border: 1px solid #cdd3de;
+            background: #f9fafc;
+            cursor: pointer;
+            transition: border-color 0.18s ease, box-shadow 0.18s ease;
+        }
+
+        .option-item input {
+            accent-color: #0f172a;
+        }
+
+        .option-item.selected {
+            border-color: #0f172a;
+            box-shadow: 0 0 0 2px rgba(15, 23, 42, 0.15);
+        }
+
+        .option-label {
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .option-text {
+            color: #1f2937;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 14px;
+        }
+
+        button {
+            border: 0;
+            border-radius: 10px;
+            padding: 10px 14px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .primary {
+            background: #0f172a;
+            color: #fff;
+        }
+
+        .secondary {
+            background: #e5e7eb;
+            color: #111827;
+        }
+
+        .message {
+            margin-top: 12px;
+            min-height: 22px;
+            color: #1f2937;
+        }
