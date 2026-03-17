@@ -203,7 +203,7 @@
     });
 
     backBtn.addEventListener("click", function () {
-        window.location.href = "question_page";
+        window.location.href = "quiz_builder";
     });
 
     (async function init() {

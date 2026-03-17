@@ -26,6 +26,17 @@
         }
     }
 
+    function isMultipleChoice(item) {
+        return (
+            item &&
+            Array.isArray(item.options) &&
+            item.options.length === 4 &&
+            Number.isInteger(item.correctIndex) &&
+            item.correctIndex >= 0 &&
+            item.correctIndex < 4
+        );
+    }
+
     function renderFlashcardPreview() {
         const selectedId = flashcardSelect.value;
         const selected = flashcards.find(function (item) {
@@ -90,6 +101,9 @@
             }
             const data = await response.json();
             flashcards = Array.isArray(data.flashcards) ? data.flashcards : [];
+            flashcards = flashcards.filter(function (item) {
+                return !isMultipleChoice(item);
+            });
             renderFlashcardOptions();
         } catch (err) {
             console.error(err);

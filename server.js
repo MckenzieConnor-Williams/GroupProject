@@ -54,6 +54,11 @@ app.get('/question_page', (req, res) => {
   res.sendFile(path.join(__dirname, 'question_page'));
 });
 
+app.get('/quiz_builder', (req, res) => {
+  res.type('html');
+  res.sendFile(path.join(__dirname, 'quiz_builder.html'));
+});
+
 app.get('/question_answer', (req, res) => {
   res.type('html');
   res.sendFile(path.join(__dirname, 'question_answer.html'));

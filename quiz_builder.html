@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Create Flashcards</title>
+    <title>Create Quiz</title>
     <style>
         :root {
             --page-bg: #c9cfdd;
@@ -466,8 +466,8 @@
         </div>
 
         <section class="hero">
-            <h1>Flashcards</h1>
-            <p>Create quick Q&A flashcards and review them anytime</p>
+            <h1>Quiz Builder</h1>
+            <p>Create multiple-choice questions and test your knowledge</p>
         </section>
 
         <section class="tab-switch" aria-label="Mode selection">
@@ -475,48 +475,87 @@
                 <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                     <path d="M12 6.75v13.5m0-13.5C10.54 5.8 8.47 5.25 6.75 5.25C5.03 5.25 3.38 5.55 2.25 6.15V18c1.13-.6 2.78-.9 4.5-.9 1.72 0 3.79.55 5.25 1.5m0-11.85c1.46-.95 3.53-1.5 5.25-1.5 1.72 0 3.37.3 4.5.9V18c-1.13-.6-2.78-.9-4.5-.9-1.72 0-3.79.55-5.25 1.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
-                Create Flashcards
+                Create Quiz
             </button>
-            <button type="button" class="tab-btn" id="view-flashcards-btn">
+            <button type="button" class="tab-btn" id="take-quiz-btn">
                 <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                     <path d="M10 18h4m-6.5-6.5a2.5 2.5 0 1 1 5 0c0 .8-.3 1.2-.8 1.8-.4.4-.7.9-.7 1.7V16h2v-1c0-.3.1-.5.3-.7.7-.7 1.7-1.8 1.7-3.8a4.5 4.5 0 1 0-9 0c0 1.9 1 3.1 1.7 3.8.2.2.3.4.3.7v1h2v-1c0-.8-.3-1.3-.7-1.7-.5-.6-.8-1-.8-1.8Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
-                View Flashcards
+                Take Quiz
             </button>
         </section>
 
         <section class="card">
-            <h2 class="create-title">Create New Flashcard</h2>
+            <h2 class="create-title">Create New Quiz Question</h2>
             <form id="question-form">
                 <div class="field-group">
                     <label for="question-input">Question</label>
                     <input id="question-input" type="text" placeholder="Enter your question..." required />
                 </div>
-                <div class="field-group">
-                    <label for="answer-input">Answer</label>
-                    <input id="answer-input" type="text" placeholder="Enter the answer..." required />
+                <div class="options-grid" aria-label="Answer options">
+                    <div class="option-row">
+                        <label for="option-1">Option A</label>
+                        <div class="option-input-row">
+                            <input id="option-1" type="text" placeholder="Enter answer choice A..." data-option-index="0" required />
+                            <label class="correct-choice">
+                                <input type="radio" name="correct-option" value="0" />
+                                Correct
+                            </label>
+                        </div>
+                    </div>
+                    <div class="option-row">
+                        <label for="option-2">Option B</label>
+                        <div class="option-input-row">
+                            <input id="option-2" type="text" placeholder="Enter answer choice B..." data-option-index="1" required />
+                            <label class="correct-choice">
+                                <input type="radio" name="correct-option" value="1" />
+                                Correct
+                            </label>
+                        </div>
+                    </div>
+                    <div class="option-row">
+                        <label for="option-3">Option C</label>
+                        <div class="option-input-row">
+                            <input id="option-3" type="text" placeholder="Enter answer choice C..." data-option-index="2" required />
+                            <label class="correct-choice">
+                                <input type="radio" name="correct-option" value="2" />
+                                Correct
+                            </label>
+                        </div>
+                    </div>
+                    <div class="option-row">
+                        <label for="option-4">Option D</label>
+                        <div class="option-input-row">
+                            <input id="option-4" type="text" placeholder="Enter answer choice D..." data-option-index="3" required />
+                            <label class="correct-choice">
+                                <input type="radio" name="correct-option" value="3" />
+                                Correct
+                            </label>
+                        </div>
+                    </div>
                 </div>
                 <button class="add-btn" type="submit">
                     <span class="add-symbol">+</span>
-                    Add Flashcard
+                    Add Question
                 </button>
+                <button class="secondary-btn" type="button" id="seed-btn">Add Sample CS Questions</button>
             </form>
         </section>
 
         <section class="questions-wrap">
-            <h2 id="questions-title">Your Flashcards (0)</h2>
+            <h2 id="questions-title">Your Questions (0)</h2>
             <div class="card">
                 <div id="questions-empty" class="empty-state">
                     <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true" style="width:64px;height:64px;color:#767a8d;">
                         <path d="M12 6.75v13.5m0-13.5C10.54 5.8 8.47 5.25 6.75 5.25C5.03 5.25 3.38 5.55 2.25 6.15V18c1.13-.6 2.78-.9 4.5-.9 1.72 0 3.79.55 5.25 1.5m0-11.85c1.46-.95 3.53-1.5 5.25-1.5 1.72 0 3.37.3 4.5.9V18c-1.13-.6-2.78-.9-4.5-.9-1.72 0-3.79.55-5.25 1.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
-                    <p>No flashcards yet. Create your first one above!</p>
+                    <p>No questions yet. Create your first question above!</p>
                 </div>
                 <div id="questions-list" class="questions-list" hidden></div>
             </div>
         </section>
     </main>
 
-    <script src="question_page.js"></script>
+    <script src="quiz_builder.js"></script>
 </body>
 </html>
