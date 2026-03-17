@@ -255,7 +255,26 @@ app.get('/api/free-answer/attempts', async (req, res) => {
       return res.status(400).json({ message: 'Email query parameter is required' });
     }
 
-    const attempts = await FreeAnswerAttempt\n+      .find({ userEmail: email })\n+      .sort({ createdAt: -1 })\n+      .lean();\n+\n+    return res.status(200).json({\n+      attempts: attempts.map((attempt) => ({\n+        id: String(attempt._id),\n+        score: attempt.score,\n+        total: attempt.total,\n+        createdAt: attempt.createdAt,\n+        answers: attempt.answers || []\n+      }))\n+    });\n+  } catch (err) {\n+    console.error(err);\n+    return res.status(500).json({ message: 'Server error while loading free-answer attempts' });\n+  }\n+});\n+\n app.post('/api/flashcards', async (req, res) => {
+    const attempts = await FreeAnswerAttempt
+      .find({ userEmail: email })
+      .sort({ createdAt: -1 })
+      .lean();
+
+    return res.status(200).json({
+      attempts: attempts.map((attempt) => ({
+        id: String(attempt._id),
+        score: attempt.score,
+        total: attempt.total,
+        createdAt: attempt.createdAt,
+        answers: attempt.answers || []
+      }))
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: 'Server error while loading free-answer attempts' });
+  }
+});
+
 app.post('/api/flashcards', async (req, res) => {
   try {
     if (!ensureDatabaseAvailable(res)) return;
