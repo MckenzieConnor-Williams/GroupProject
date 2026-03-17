@@ -252,6 +252,8 @@ app.post('/api/short-answer/attempts', async (req, res) => {
     console.error(err);
     return res.status(500).json({ message: 'Server error while saving short-answer attempt' });
   }
+});
+
 app.post('/api/free-answer/attempts', async (req, res) => {
   try {
     if (!ensureDatabaseAvailable(res)) return;
@@ -314,8 +316,6 @@ app.post('/api/free-answer/attempts', async (req, res) => {
     console.error(err);
     return res.status(500).json({ message: 'Server error while saving short-answer attempt' });
   }
-
-
 });
 
 app.get('/api/short-answer/attempts', async (req, res) => {
@@ -345,6 +345,8 @@ app.get('/api/short-answer/attempts', async (req, res) => {
     console.error(err);
     return res.status(500).json({ message: 'Server error while loading short-answer attempts' });
   }
+});
+
 app.get('/api/free-answer/attempts', async (req, res) => {
   try {
     if (!ensureDatabaseAvailable(res)) return;
@@ -372,8 +374,6 @@ app.get('/api/free-answer/attempts', async (req, res) => {
     console.error(err);
     return res.status(500).json({ message: 'Server error while loading short-answer attempts' });
   }
-
-
 });
 
 app.post('/api/flashcards', async (req, res) => {
