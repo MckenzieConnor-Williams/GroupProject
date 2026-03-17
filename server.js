@@ -60,6 +60,11 @@ app.get('/create_quiz', (req, res) => {
   res.sendFile(path.join(__dirname, 'create_quiz.html'));
 });
 
+app.get('/create_short_answer', (req, res) => {
+  res.type('html');
+  res.sendFile(path.join(__dirname, 'create_short_answer.html'));
+});
+
 app.get('/quiz_builder', (req, res) => {
   res.type('html');
   res.sendFile(path.join(__dirname, 'quiz_builder.html'));

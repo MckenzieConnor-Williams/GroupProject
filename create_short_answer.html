@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Short Answer</title>
+    <link rel="stylesheet" href="create_short_answer.css">
+</head>
+<body>
+    <main class="page">
+        <div class="page-nav">
+            <a class="back-home-btn" href="index.html" aria-label="Go back to home page">Back Home</a>
+        </div>
+
+        <section class="hero">
+            <h1>Short Answer Builder</h1>
+            <p>Create Q&amp;A flashcards for short-answer quizzes.</p>
+        </section>
+
+        <section class="card">
+            <h2 class="create-title">Create New Short Answer</h2>
+            <form id="question-form">
+                <div class="field-group">
+                    <label for="question-input">Question</label>
+                    <input id="question-input" type="text" placeholder="Enter your question..." required />
+                </div>
+                <div class="field-group">
+                    <label for="answer-input">Answer</label>
+                    <input id="answer-input" type="text" placeholder="Enter the answer..." required />
+                </div>
+                <button class="add-btn" type="submit">Add Short Answer</button>
+            </form>
+        </section>
+
+        <section class="questions-wrap">
+            <h2 id="questions-title">Your Short Answers (0)</h2>
+            <div class="card">
+                <div id="questions-empty" class="empty-state">
+                    <p>No short answers yet. Create your first one above!</p>
+                </div>
+                <div id="questions-list" class="questions-list" hidden></div>
+            </div>
+        </section>
+    </main>
+
+    <script src="create_short_answer.js"></script>
+</body>
+</html>

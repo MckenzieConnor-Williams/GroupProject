@@ -1,0 +1,155 @@
+body {
+    margin: 0;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: #c9cfdd;
+    color: #111827;
+}
+
+.page {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 36px 16px 48px;
+}
+
+.page-nav {
+    margin-bottom: 14px;
+}
+
+.back-home-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    background: #f5f6fa;
+    color: #111827;
+    border: 1px solid #c7ccda;
+    border-radius: 10px;
+    padding: 8px 12px;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.back-home-btn:hover {
+    background: #eceff6;
+}
+
+.hero h1 {
+    margin: 0 0 6px;
+    font-size: 34px;
+    font-weight: 800;
+}
+
+.hero p {
+    margin: 0 0 20px;
+    color: #4b5563;
+}
+
+.card {
+    background: #f3f3f3;
+    border: 1px solid #d7d9df;
+    border-radius: 16px;
+    padding: 22px;
+}
+
+.create-title {
+    margin: 0 0 18px;
+    font-size: 26px;
+    font-weight: 800;
+}
+
+.field-group {
+    margin-bottom: 16px;
+}
+
+.field-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 700;
+}
+
+.field-group input {
+    width: 100%;
+    border: 1px solid #cdd3de;
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-size: 16px;
+    outline: 2px solid transparent;
+    transition: outline-color 0.18s ease, border-color 0.18s ease;
+}
+
+.field-group input:focus {
+    outline-color: #0f172a;
+    border-color: #0f172a;
+}
+
+.add-btn {
+    width: 100%;
+    border: 0;
+    border-radius: 12px;
+    padding: 12px 14px;
+    cursor: pointer;
+    font-weight: 700;
+    background: #0f172a;
+    color: #fff;
+}
+
+.questions-wrap {
+    margin-top: 24px;
+}
+
+.questions-wrap h2 {
+    margin: 0 0 12px;
+    font-size: 24px;
+    font-weight: 800;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 28px 16px;
+    color: #6b7280;
+}
+
+.questions-list {
+    display: grid;
+    gap: 12px;
+}
+
+.question-item {
+    background: #ffffff;
+    border: 1px solid #d7d9df;
+    border-radius: 12px;
+    padding: 14px;
+}
+
+.question-item h3 {
+    margin: 0 0 6px;
+    font-size: 18px;
+}
+
+.question-item p {
+    margin: 0;
+    color: #374151;
+}
+
+.question-item-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.question-action-btn {
+    border: 1px solid #c4c9d5;
+    border-radius: 10px;
+    background: #f6f7fa;
+    color: #111827;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 6px 10px;
+    cursor: pointer;
+}
+
+.question-action-btn.delete-btn {
+    border-color: #ef9a9a;
+    color: #8b1f1f;
+    background: #fff1f1;
+}
