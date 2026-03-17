@@ -87,7 +87,7 @@
         if (!email) return;
 
         try {
-            const response = await fetch("/api/free-answer/attempts", {
+            const response = await fetch("/api/short-answer/attempts", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -108,7 +108,7 @@
 
     function updateUI() {
         if (questions.length === 0) {
-            questionEl.textContent = "No free-answer flashcards yet. Create some first.";
+            questionEl.textContent = "No short-answer flashcards yet. Create some first.";
             progressEl.textContent = "Question 0 of 0";
             scoreEl.textContent = "Score: 0";
             submitBtn.disabled = true;

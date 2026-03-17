@@ -34,7 +34,7 @@
         attemptsEl.innerHTML = "";
 
         if (!attempts.length) {
-            statusEl.textContent = "No free-answer attempts yet.";
+            statusEl.textContent = "No short-answer attempts yet.";
             return;
         }
 
@@ -106,7 +106,7 @@
 
         statusEl.textContent = "Loading attempts...";
         try {
-            const response = await fetch("/api/free-answer/attempts?email=" + encodeURIComponent(email));
+            const response = await fetch("/api/short-answer/attempts?email=" + encodeURIComponent(email));
             if (!response.ok) {
                 statusEl.textContent = await readErrorMessage(response, "Unable to load attempts.");
                 renderAttempts([]);

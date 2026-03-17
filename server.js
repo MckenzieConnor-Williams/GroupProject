@@ -65,14 +65,22 @@ app.get('/question_answer', (req, res) => {
   res.sendFile(path.join(__dirname, 'question_answer.html'));
 });
 
-app.get('/free_answer', (req, res) => {
+app.get('/short_answer', (req, res) => {
   res.type('html');
-  res.sendFile(path.join(__dirname, 'free_answer.html'));
+  res.sendFile(path.join(__dirname, 'short_answer.html'));
+});
+
+app.get('/free_answer', (req, res) => {
+  res.redirect(302, '/short_answer');
+});
+
+app.get('/short_answer_history', (req, res) => {
+  res.type('html');
+  res.sendFile(path.join(__dirname, 'short_answer_history.html'));
 });
 
 app.get('/free_answer_history', (req, res) => {
-  res.type('html');
-  res.sendFile(path.join(__dirname, 'free_answer_history.html'));
+  res.redirect(302, '/short_answer_history');
 });
 
 app.get('/flashcards', (req, res) => {
@@ -182,6 +190,68 @@ app.get('/api/flashcards', async (req, res) => {
   }
 });
 
+app.post('/api/short-answer/attempts', async (req, res) => {
+  try {
+    if (!ensureDatabaseAvailable(res)) return;
+
+    const userEmail = String(req.body.userEmail || '').trim().toLowerCase();
+    const answers = Array.isArray(req.body.answers) ? req.body.answers : [];
+    const providedScore = Number(req.body.score);
+    const providedTotal = Number(req.body.total);
+
+    if (!userEmail) {
+      return res.status(400).json({ message: 'User email is required' });
+    }
+
+    if (answers.length === 0) {
+      return res.status(400).json({ message: 'Answers array is required' });
+    }
+
+    const sanitizedAnswers = [];
+    for (const item of answers) {
+      const flashcardId = String(item.flashcardId || '').trim();
+      const question = String(item.question || '').trim();
+      const correctAnswer = String(item.correctAnswer || '').trim();
+      const userAnswer = String(item.userAnswer || '').trim();
+      const isCorrect = Boolean(item.isCorrect);
+
+      if (!flashcardId || !question || !correctAnswer || !userAnswer) {
+        return res.status(400).json({ message: 'Each answer needs flashcardId, question, correctAnswer, and userAnswer' });
+      }
+
+      sanitizedAnswers.push({
+        flashcardId,
+        question,
+        correctAnswer,
+        userAnswer,
+        isCorrect
+      });
+    }
+
+    const total = Number.isInteger(providedTotal) && providedTotal > 0 ? providedTotal : sanitizedAnswers.length;
+    const computedScore = sanitizedAnswers.reduce((sum, item) => sum + (item.isCorrect ? 1 : 0), 0);
+    const score = Number.isInteger(providedScore) && providedScore >= 0 ? providedScore : computedScore;
+
+    const attempt = await FreeAnswerAttempt.create({
+      userEmail,
+      score,
+      total,
+      answers: sanitizedAnswers
+    });
+
+    return res.status(201).json({
+      message: 'Short-answer attempt saved',
+      attempt: {
+        id: String(attempt._id),
+        score: attempt.score,
+        total: attempt.total,
+        createdAt: attempt.createdAt
+      }
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: 'Server error while saving short-answer attempt' });
+  }
 app.post('/api/free-answer/attempts', async (req, res) => {
   try {
     if (!ensureDatabaseAvailable(res)) return;
@@ -232,7 +302,7 @@ app.post('/api/free-answer/attempts', async (req, res) => {
     });
 
     return res.status(201).json({
-      message: 'Free-answer attempt saved',
+      message: 'Short-answer attempt saved',
       attempt: {
         id: String(attempt._id),
         score: attempt.score,
@@ -242,10 +312,39 @@ app.post('/api/free-answer/attempts', async (req, res) => {
     });
   } catch (err) {
     console.error(err);
-    return res.status(500).json({ message: 'Server error while saving free-answer attempt' });
+    return res.status(500).json({ message: 'Server error while saving short-answer attempt' });
   }
+
+
 });
 
+app.get('/api/short-answer/attempts', async (req, res) => {
+  try {
+    if (!ensureDatabaseAvailable(res)) return;
+
+    const email = String(req.query.email || '').trim().toLowerCase();
+    if (!email) {
+      return res.status(400).json({ message: 'Email query parameter is required' });
+    }
+
+    const attempts = await FreeAnswerAttempt
+      .find({ userEmail: email })
+      .sort({ createdAt: -1 })
+      .lean();
+
+    return res.status(200).json({
+      attempts: attempts.map((attempt) => ({
+        id: String(attempt._id),
+        score: attempt.score,
+        total: attempt.total,
+        createdAt: attempt.createdAt,
+        answers: attempt.answers || []
+      }))
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: 'Server error while loading short-answer attempts' });
+  }
 app.get('/api/free-answer/attempts', async (req, res) => {
   try {
     if (!ensureDatabaseAvailable(res)) return;
@@ -271,8 +370,10 @@ app.get('/api/free-answer/attempts', async (req, res) => {
     });
   } catch (err) {
     console.error(err);
-    return res.status(500).json({ message: 'Server error while loading free-answer attempts' });
+    return res.status(500).json({ message: 'Server error while loading short-answer attempts' });
   }
+
+
 });
 
 app.post('/api/flashcards', async (req, res) => {
