@@ -14,6 +14,8 @@
     let currentIndex = 0;
     let score = 0;
     let submitted = false;
+    let attemptSaved = false;
+    const answers = [];
 
     function normalizeAnswer(value) {
         return String(value || "")
@@ -77,6 +79,33 @@
         return arr;
     }
 
+    async function saveAttempt() {
+        if (attemptSaved || answers.length === 0) return;
+        attemptSaved = true;
+
+        const email = getCurrentUserEmail();
+        if (!email) return;
+
+        try {
+            const response = await fetch("/api/free-answer/attempts", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    userEmail: email,
+                    score: score,
+                    total: questions.length,
+                    answers: answers
+                })
+            });
+            if (!response.ok) {
+                const errorMessage = await readErrorMessage(response, "Failed to save attempt");
+                console.error(errorMessage);
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
     function updateUI() {
         if (questions.length === 0) {
             questionEl.textContent = "No free-answer flashcards yet. Create some first.";
@@ -98,6 +127,7 @@
             submitBtn.disabled = true;
             nextBtn.disabled = true;
             answerInput.disabled = true;
+            saveAttempt();
             return;
         }
 
@@ -118,7 +148,8 @@
     submitBtn.addEventListener("click", function () {
         if (submitted || currentIndex >= questions.length) return;
         const item = questions[currentIndex];
-        const userAnswer = normalizeAnswer(answerInput.value);
+        const userAnswerRaw = answerInput.value;
+        const userAnswer = normalizeAnswer(userAnswerRaw);
         const correctAnswer = normalizeAnswer(item.answer);
 
         if (!userAnswer) {
@@ -127,12 +158,22 @@
             return;
         }
 
+        const isCorrect = userAnswer === correctAnswer;
+
+        answers.push({
+            flashcardId: item.id,
+            question: item.question,
+            correctAnswer: item.answer,
+            userAnswer: userAnswerRaw.trim(),
+            isCorrect: isCorrect
+        });
+
         submitted = true;
         answerInput.disabled = true;
         submitBtn.disabled = true;
         nextBtn.disabled = false;
 
-        if (userAnswer === correctAnswer) {
+        if (isCorrect) {
             score += 1;
             messageEl.textContent = "Correct!";
             messageEl.className = "message correct";

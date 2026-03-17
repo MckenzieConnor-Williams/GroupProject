@@ -3,8 +3,9 @@ require('dotenv').config();
 const path = require('path');
 const express = require('express');
 const mongoose = require('mongoose');
-const User = require('./models/User');
-const Flashcard = require('./models/Flashcard');
+const User = require('./models/collections/User');
+const Flashcard = require('./models/collections/Flashcard');
+const FreeAnswerAttempt = require('./models/collections/FreeAnswerAttempt');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -67,6 +68,11 @@ app.get('/question_answer', (req, res) => {
 app.get('/free_answer', (req, res) => {
   res.type('html');
   res.sendFile(path.join(__dirname, 'free_answer.html'));
+});
+
+app.get('/free_answer_history', (req, res) => {
+  res.type('html');
+  res.sendFile(path.join(__dirname, 'free_answer_history.html'));
 });
 
 app.get('/flashcards', (req, res) => {
@@ -176,6 +182,80 @@ app.get('/api/flashcards', async (req, res) => {
   }
 });
 
+app.post('/api/free-answer/attempts', async (req, res) => {
+  try {
+    if (!ensureDatabaseAvailable(res)) return;
+
+    const userEmail = String(req.body.userEmail || '').trim().toLowerCase();
+    const answers = Array.isArray(req.body.answers) ? req.body.answers : [];
+    const providedScore = Number(req.body.score);
+    const providedTotal = Number(req.body.total);
+
+    if (!userEmail) {
+      return res.status(400).json({ message: 'User email is required' });
+    }
+
+    if (answers.length === 0) {
+      return res.status(400).json({ message: 'Answers array is required' });
+    }
+
+    const sanitizedAnswers = [];
+    for (const item of answers) {
+      const flashcardId = String(item.flashcardId || '').trim();
+      const question = String(item.question || '').trim();
+      const correctAnswer = String(item.correctAnswer || '').trim();
+      const userAnswer = String(item.userAnswer || '').trim();
+      const isCorrect = Boolean(item.isCorrect);
+
+      if (!flashcardId || !question || !correctAnswer || !userAnswer) {
+        return res.status(400).json({ message: 'Each answer needs flashcardId, question, correctAnswer, and userAnswer' });
+      }
+
+      sanitizedAnswers.push({
+        flashcardId,
+        question,
+        correctAnswer,
+        userAnswer,
+        isCorrect
+      });
+    }
+
+    const total = Number.isInteger(providedTotal) && providedTotal > 0 ? providedTotal : sanitizedAnswers.length;
+    const computedScore = sanitizedAnswers.reduce((sum, item) => sum + (item.isCorrect ? 1 : 0), 0);
+    const score = Number.isInteger(providedScore) && providedScore >= 0 ? providedScore : computedScore;
+
+    const attempt = await FreeAnswerAttempt.create({
+      userEmail,
+      score,
+      total,
+      answers: sanitizedAnswers
+    });
+
+    return res.status(201).json({
+      message: 'Free-answer attempt saved',
+      attempt: {
+        id: String(attempt._id),
+        score: attempt.score,
+        total: attempt.total,
+        createdAt: attempt.createdAt
+      }
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: 'Server error while saving free-answer attempt' });
+  }
+});
+
+app.get('/api/free-answer/attempts', async (req, res) => {
+  try {
+    if (!ensureDatabaseAvailable(res)) return;
+
+    const email = String(req.query.email || '').trim().toLowerCase();
+    if (!email) {
+      return res.status(400).json({ message: 'Email query parameter is required' });
+    }
+
+    const attempts = await FreeAnswerAttempt\n+      .find({ userEmail: email })\n+      .sort({ createdAt: -1 })\n+      .lean();\n+\n+    return res.status(200).json({\n+      attempts: attempts.map((attempt) => ({\n+        id: String(attempt._id),\n+        score: attempt.score,\n+        total: attempt.total,\n+        createdAt: attempt.createdAt,\n+        answers: attempt.answers || []\n+      }))\n+    });\n+  } catch (err) {\n+    console.error(err);\n+    return res.status(500).json({ message: 'Server error while loading free-answer attempts' });\n+  }\n+});\n+\n app.post('/api/flashcards', async (req, res) => {
 app.post('/api/flashcards', async (req, res) => {
   try {
     if (!ensureDatabaseAvailable(res)) return;

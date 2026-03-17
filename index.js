@@ -11,6 +11,7 @@
     const createFlashcardsLink = document.getElementById("create-flashcards-link");
     const createQuizLink = document.getElementById("create-quiz-link");
     const takeFreeAnswerLink = document.getElementById("take-free-answer-link");
+    const freeAnswerHistoryLink = document.getElementById("free-answer-history-link");
 
     function getCurrentUser() {
         try {
@@ -89,6 +90,7 @@
     createFlashcardsLink?.addEventListener("click", requireLoginForTool);
     createQuizLink?.addEventListener("click", requireLoginForTool);
     takeFreeAnswerLink?.addEventListener("click", requireLoginForTool);
+    freeAnswerHistoryLink?.addEventListener("click", requireLoginForTool);
 
     document.addEventListener("click", function (event) {
         if (!toolsMenu || !toolsToggle) return;
