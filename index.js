@@ -41,7 +41,7 @@
             setVisible(signupLink, false);
             setVisible(createLink, true);
             setVisible(logoutLink, true);
-            createLink?.setAttribute("href", "question_page");
+            createLink?.setAttribute("href", "create_quiz");
             return;
         }
 
@@ -68,7 +68,7 @@
 
     startStudyingBtn?.addEventListener("click", function () {
         if (isLoggedIn()) {
-            window.location.href = "question_page";
+            window.location.href = "create_quiz";
             return;
         }
         window.location.href = "signup.html";

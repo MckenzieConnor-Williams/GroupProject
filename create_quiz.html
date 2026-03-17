@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Quiz</title>
+    <link rel="stylesheet" href="create_quiz.css">
+</head>
+<body>
+    <main class="page">
+        <div class="page-nav">
+            <a class="back-home-btn" href="index.html" aria-label="Go back to home page">Back Home</a>
+        </div>
+
+        <header class="hero">
+            <h1>Create a Quiz</h1>
+            <p>Choose the quiz type you want to build.</p>
+        </header>
+
+        <section class="options">
+            <article class="option-card" data-route="short_answer" tabindex="0" role="button" aria-label="Create a short answer quiz">
+                <h2>Short Answer Quiz</h2>
+                <p>Create Q&amp;A flashcards, then test yourself by typing answers.</p>
+                <span class="action">Create Short Answer</span>
+            </article>
+            <article class="option-card" data-route="quiz_builder" tabindex="0" role="button" aria-label="Create a multiple choice quiz">
+                <h2>Multiple Choice Quiz</h2>
+                <p>Build multiple choice questions with four options.</p>
+                <span class="action">Create Multiple Choice</span>
+            </article>
+        </section>
+    </main>
+
+    <script src="create_quiz.js"></script>
+</body>
+</html>
